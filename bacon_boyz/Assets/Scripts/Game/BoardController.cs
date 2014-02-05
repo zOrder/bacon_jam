@@ -11,6 +11,7 @@ public class BoardController : MonoBehaviour
 	{
 		SetupModel();
 		InitBoard();
+		DropGems();
 	}
 		
 	public void OnTap( TapGesture gesture)
@@ -21,37 +22,52 @@ public class BoardController : MonoBehaviour
 
 		Debug.Log("tap "+gesture.Position +" "+gesture.Selection+" "+worldPoint + " -> "+x +" "+ y );
 
-		GemModel gem = boardModel.GetGemAtPosition(x, y);
-		if(gem != null)
-		{
+		List<GemProxy> matches = FindMatchingGemsForPosition(x,y);
 
+		foreach(GemProxy found in matches)
+		{
+//			SpriteRenderer renderer = found.gameObject.GetComponent<SpriteRenderer>();
+//			renderer.color = Color.white;
+
+			GemProxy top = found.GetTopGem();
+
+			if(found.prev != null)
+			{
+				found.prev.next = found.next;
+				top  = found.prev.GetTopGem();
+			}
+			if(found.next != null)
+			{
+				found.next.prev = found.prev;
+			}
+
+			top.next = found;
+			found.prev = top;
+			found.next = null;
+
+			found.SetOffscreen();
 		}
 
-		List<GemModel> matches = FindMatchingGemsForPosition(x,y);
+		boardModel.SortModel();
 
-		foreach(GemModel found in matches)
-		{
-			SpriteRenderer renderer = found.gameObject.GetComponent<SpriteRenderer>();
-			renderer.color = Color.white;
-		}
-
+		DropGems();
 	}
 
-	private List<GemModel> FindMatchingGemsForPosition(int x, int y)
+	private List<GemProxy> FindMatchingGemsForPosition(int x, int y)
 	{
 		Stack<Vector2> stack = new Stack<Vector2>();
 		HashSet<Vector2> visited = new HashSet<Vector2>();
 		stack.Push(new Vector2(x,y));
 
 		Vector2 top; 
-		List<GemModel> matches = new List<GemModel>();
+		List<GemProxy> matches = new List<GemProxy>();
 
-		GemModel origin = boardModel.GetGemAtPosition(x, y);
+		GemProxy origin = boardModel.GetGemAtPosition(x, y);
 		if(origin != null)
 		{
 			matches.Add(origin);
 		}
-		GemModel gem;
+		GemProxy gem;
 
 		while(stack.Count >0)
 		{
@@ -96,58 +112,41 @@ public class BoardController : MonoBehaviour
 
 		for(int i = 0; i < Constants.GEM_AMOUNT_WIDTH; i++ )
 		{
+			GemProxy prevGem = null;
+
+			List<GemProxy> column = new List<GemProxy>();
+
 			for(int j = 0; j < Constants.GEM_AMOUNT_HEIGHT; j++ )
 			{
 				GameObject gem = Instantiate(resource) as GameObject;
 
-				GemModel model = gem.AddComponent<GemModel>();
-				model.color = RandomColor();
+				GemProxy gemProxy = gem.AddComponent<GemProxy>();
 
-				SpriteRenderer renderer = gem.GetComponent<SpriteRenderer>();
-				renderer.color = GetColorForGem(model.color);
+				if(prevGem != null)
+				{
+					prevGem.next = gemProxy;
+				}
+				gemProxy.prev = prevGem;
+				prevGem = gemProxy;
 
 				gem.transform.parent = root.transform;
-				gem.transform.position = new Vector3(i * Constants.GEM_UNIT_DIMENSION, j * Constants.GEM_UNIT_DIMENSION, 0 );
+				gem.transform.position = new Vector3(i * Constants.GEM_UNIT_DIMENSION, Constants.OFFSCREEN_POSITION_Y , 0 );
 
-				boardModel.gems.Add(model);
+				column.Add(gemProxy);
 			}
+
+			boardModel.gemProxys.Add(column);
 		}
 
 		//TODO center root
 	}
 
-
-	private Color GetColorForGem(GemColors gem)
+	private void DropGems()
 	{
-		Color gemColor = Color.white;
-
-		switch(gem)
+		List<GemProxy> bottomGems = boardModel.GetBottomGems();
+		foreach(GemProxy p in bottomGems)
 		{
-		case GemColors.RED:
-			gemColor = Color.red;
-			break;
-		case GemColors.GREEN:
-			gemColor = Color.green;
-			break;
-		case GemColors.BLUE:
-			gemColor = Color.blue;
-			break;
-		case GemColors.PURPLE:
-			gemColor = Color.magenta;
-			break;
-		case GemColors.YELLOW:
-			gemColor = Color.yellow;
-			break;
+			p.MoveDown();
 		}
-
-		return gemColor;
-	}
-
-
-	private System.Random random = new System.Random();
-	private GemColors RandomColor()
-	{
-		var values = Enum.GetValues(typeof(GemColors));
-		return (GemColors)values.GetValue(random.Next(values.Length));
 	}
 }

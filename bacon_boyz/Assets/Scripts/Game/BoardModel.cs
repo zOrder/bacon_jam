@@ -4,25 +4,64 @@ using System.Collections.Generic;
 
 public class BoardModel 
 {
-	public List<GemModel> gems;
+	public List<List<GemProxy>> gemProxys;
 
 	public BoardModel()
 	{
-		gems = new List<GemModel>();
+		gemProxys= new List<List<GemProxy>>();
 	} 
 
-	public GemModel GetGemAtPosition(int x, int y)
+	public void SortModel()
 	{
-		if(x >= 0 && x < Constants.GEM_AMOUNT_WIDTH &&
-		   y >= 0 && y < Constants.GEM_AMOUNT_HEIGHT)
+		List<GemProxy> bottoms =  GetBottomGems();
+		List<GemProxy> sort;
+
+		gemProxys.Clear();
+
+		foreach(GemProxy g in bottoms)
 		{
-			int index = x * Constants.GEM_AMOUNT_HEIGHT+ y;
-			
-			if(index >= 0 && index < gems.Count)
+			sort = new List<GemProxy>();
+			sort.Add(g);
+
+			Debug.Log("NEW COLUMN "+g.color);
+
+			GemProxy p = g;
+
+			while(p.next != null)
 			{
-				return gems[index];
+				sort.Add(p.next);
+				Debug.Log("ADD "+p.next.color);
+				p = p.next;
+			}
+
+			gemProxys.Add(sort);
+		}
+	}
+
+	public GemProxy GetGemAtPosition(int x, int y)
+	{
+		if(x >= 0 && x < Constants.GEM_AMOUNT_WIDTH)
+		{
+			List<GemProxy> bottomGems = gemProxys[x];
+			if(y >= 0 && y < Constants.GEM_AMOUNT_HEIGHT)
+			{
+				return bottomGems[y];
 			}
 		}
+		   
 		return null;
 	}	
+
+	public List<GemProxy> GetBottomGems()
+	{
+		List<GemProxy> bottomGems = new List<GemProxy>();
+
+		foreach(List<GemProxy> column in gemProxys)
+		{
+			bottomGems.Add(column[0].GetBottomGem());
+
+		}
+
+		return bottomGems;
+	}
 }
