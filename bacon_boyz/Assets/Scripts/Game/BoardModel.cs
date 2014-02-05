@@ -22,15 +22,11 @@ public class BoardModel
 		{
 			sort = new List<GemProxy>();
 			sort.Add(g);
-
-			Debug.Log("NEW COLUMN "+g.color);
-
 			GemProxy p = g;
 
 			while(p.next != null)
 			{
 				sort.Add(p.next);
-				Debug.Log("ADD "+p.next.color);
 				p = p.next;
 			}
 
@@ -63,5 +59,22 @@ public class BoardModel
 		}
 
 		return bottomGems;
+	}
+
+	public List<GemProxy> GetRandomCanons()
+	{
+		List<GemProxy> canons = new List<GemProxy>();
+		for(var i = 0; i< Constants.NUMBER_OF_CANONS; i++)
+		{
+			canons.Add(GetRandomGem());
+		}
+		return canons;
+	}
+
+	private GemProxy GetRandomGem()
+	{
+		int colum = Random.Range(0, Constants.GEM_AMOUNT_WIDTH);
+		int row = Random.Range(0, Constants.GEM_AMOUNT_HEIGHT);
+		return gemProxys[colum][row];
 	}
 }

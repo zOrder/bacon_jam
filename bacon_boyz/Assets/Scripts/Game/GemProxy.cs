@@ -22,7 +22,7 @@ public enum GemType
 public class GemProxy : MonoBehaviour 
 {
 	public GemColor color;
-	public GemType type;
+	public GemType type = GemType.GEM;
 
 	public GemProxy prev;
 	public GemProxy next;
@@ -30,6 +30,20 @@ public class GemProxy : MonoBehaviour
 	void Awake()
 	{
 		UpdateColor();
+	}
+
+	public void MakeCanon()
+	{
+		type = GemType.CANON;
+
+		GameObject resource = Resources.Load("Gem") as GameObject;
+		GameObject canon = Instantiate(resource) as GameObject;
+
+		canon.transform.localScale =new Vector3(0.5f, 0.5f, 1);
+		SpriteRenderer renderer = canon.GetComponent<SpriteRenderer>();
+		renderer.color = Color.black;
+		canon.transform.parent = transform;
+		canon.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
 	}
 
 	public GemProxy GetTopGem()

@@ -11,6 +11,7 @@ public class BoardController : MonoBehaviour
 	{
 		SetupModel();
 		InitBoard();
+		InitCanons();
 		DropGems();
 	}
 		
@@ -26,9 +27,6 @@ public class BoardController : MonoBehaviour
 
 		foreach(GemProxy found in matches)
 		{
-//			SpriteRenderer renderer = found.gameObject.GetComponent<SpriteRenderer>();
-//			renderer.color = Color.white;
-
 			GemProxy top = found.GetTopGem();
 
 			if(found.prev != null)
@@ -139,6 +137,15 @@ public class BoardController : MonoBehaviour
 		}
 
 		//TODO center root
+	}
+
+	private void InitCanons()
+	{
+		List<GemProxy> canons = boardModel.GetRandomCanons();
+		foreach(GemProxy canon in canons)
+		{
+			canon.MakeCanon();
+		}
 	}
 
 	private void DropGems()
