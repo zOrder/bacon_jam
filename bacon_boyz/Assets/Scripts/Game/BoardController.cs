@@ -7,12 +7,20 @@ public class BoardController : MonoBehaviour
 {
 	private BoardModel boardModel;
 
+	public string turns = "20";
+	public string health = "50";
+
+	private int remainingTurns = Constants.TURNS_PER_GAME;
+	private int remainingHealth = Constants.TURNS_PER_GAME;
+
 	void Start()
 	{
 		SetupModel();
 		InitBoard();
 		InitCanons();
 		DropGems();
+		UpdateTurns();
+		UpdateHealth();
 	}
 		
 	public void OnTap( TapGesture gesture)
@@ -49,8 +57,22 @@ public class BoardController : MonoBehaviour
 		boardModel.SortModel();
 
 		DropGems();
+
+		remainingTurns --;
+		UpdateTurns();
+		UpdateHealth();
 	}
 
+	private void UpdateTurns()
+	{
+		turns = "Turns left " + remainingTurns;
+	}
+
+	private void UpdateHealth()
+	{
+		health = "health " + remainingHealth;
+	}
+	
 	private List<GemProxy> FindMatchingGemsForPosition(int x, int y)
 	{
 		Stack<Vector2> stack = new Stack<Vector2>();
