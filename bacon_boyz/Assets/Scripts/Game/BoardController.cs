@@ -21,6 +21,7 @@ public class BoardController : MonoBehaviour
 		DropGems();
 		UpdateTurns();
 		UpdateHealth();
+		SpawnBlocker();
 	}
 		
 	public void OnTap( TapGesture gesture)
@@ -35,27 +36,8 @@ public class BoardController : MonoBehaviour
 
 		if(matches.Count >= Constants.MIN_MATCH_SIZE)
 		{
-			foreach(GemProxy found in matches)
-			{
-				GemProxy top = found.GetTopGem();
-				
-				if(found.prev != null)
-				{
-					found.prev.next = found.next;
-					top  = found.prev.GetTopGem();
-				}
-				if(found.next != null)
-				{
-					found.next.prev = found.prev;
-				}
-				
-				top.next = found;
-				found.prev = top;
-				found.next = null;
-				
-				found.SetOffscreen();
-			}
-			
+			EvaluateCanons(matches);
+			MoveMatchesOffscreen(matches);
 			boardModel.SortModel();
 			
 			DropGems();
@@ -63,6 +45,79 @@ public class BoardController : MonoBehaviour
 			remainingTurns --;
 			UpdateTurns();
 			UpdateHealth();
+			MoveBlocker();
+			SpawnBlocker();
+		}
+	}
+
+	private void SpawnBlocker()
+	{
+		if(remainingTurns % 2 == 0 )
+		{
+			GemProxy blocker = boardModel.GetRandomTopGem();
+			blocker.MakeBlocker();
+		}
+	}
+
+	private void MoveBlocker()
+	{
+		List<GemProxy> topGems = boardModel.GetTopGems();
+		foreach(GemProxy gem in topGems)
+		{
+			gem.MoveBlockerDown();
+		}
+	}
+
+	private void EvaluateCanons(List<GemProxy> matches)
+	{
+		List<GemProxy> canons = new List<GemProxy>();
+		foreach(GemProxy found in matches)
+		{
+			if(found.type.Equals(GemType.CANON))
+			{
+				canons.Add(found);
+			}
+		}
+
+		int shots = 0;
+		foreach(GemProxy canon in canons)
+		{
+			GemProxy blocker = canon.GetCanonBlocker();
+			if(blocker != null)
+			{
+				blocker.ResetType();
+			}
+			else
+			{
+				shots ++;
+			}
+		}
+
+		remainingHealth -= shots * matches.Count;
+	}
+
+	private void MoveMatchesOffscreen(List<GemProxy> matches)
+	{
+		foreach(GemProxy found in matches)
+		{
+			GemProxy top = found.GetTopGem();
+			
+			if(found.prev != null)
+			{
+				found.prev.next = found.next;
+				top  = found.prev.GetTopGem();
+			}
+			if(found.next != null)
+			{
+				found.next.prev = found.prev;
+			}
+			
+			top.next = found;
+			found.prev = top;
+			found.next = null;
+			
+			found.SetOffscreen();
+			found.ResetType();
 		}
 	}
 
@@ -161,7 +216,7 @@ public class BoardController : MonoBehaviour
 			boardModel.gemProxys.Add(column);
 		}
 
-		//TODO center root
+		//root.transform.position = new Vector3(Constants.GEM_UNIT_DIMENSION / 2, Constants.GEM_UNIT_DIMENSION, 10);
 	}
 
 	private void InitCanons()

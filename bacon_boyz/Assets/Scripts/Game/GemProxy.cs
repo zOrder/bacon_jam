@@ -27,23 +27,108 @@ public class GemProxy : MonoBehaviour
 	public GemProxy prev;
 	public GemProxy next;
 
+	private GameObject canon;
+	private GameObject blocker;
+
 	void Awake()
 	{
 		UpdateColor();
+		CreateCanonAndBlocker();
+	}
+
+	private void CreateCanonAndBlocker()
+	{
+		GameObject resource = Resources.Load("Gem") as GameObject;
+		canon = Instantiate(resource) as GameObject;
+		
+		canon.transform.localScale =new Vector3(0.5f, 0.5f, 1);
+		SpriteRenderer renderer = canon.GetComponent<SpriteRenderer>();
+		renderer.color = Color.cyan;
+		canon.transform.parent = transform;
+		canon.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+		canon.SetActive(false);
+
+		blocker = Instantiate(resource) as GameObject;
+		
+		blocker.transform.localScale =new Vector3(0.5f, 0.5f, 1);
+		renderer = blocker.GetComponent<SpriteRenderer>();
+		renderer.color = Color.black;
+		blocker.transform.parent = transform;
+		blocker.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+		blocker.SetActive(false);
 	}
 
 	public void MakeCanon()
 	{
-		type = GemType.CANON;
+		SetType(GemType.CANON);
+	}
 
-		GameObject resource = Resources.Load("Gem") as GameObject;
-		GameObject canon = Instantiate(resource) as GameObject;
+	private void SetType(GemType type)
+	{
+		this.type = type;
 
-		canon.transform.localScale =new Vector3(0.5f, 0.5f, 1);
-		SpriteRenderer renderer = canon.GetComponent<SpriteRenderer>();
-		renderer.color = Color.black;
-		canon.transform.parent = transform;
-		canon.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+		switch(type)
+		{
+		case GemType.BLOCKER:
+			blocker.SetActive(true);
+			canon.SetActive(false);
+			break;
+		case GemType.CANON:
+			blocker.SetActive(false);
+			canon.SetActive(true);
+			break;
+		case GemType.GEM:
+			blocker.SetActive(false);
+			canon.SetActive(false);
+			break;
+		}
+	}
+
+	public void ResetType()
+	{
+		SetType(GemType.GEM);
+	}
+
+	public void MakeBlocker()
+	{
+		SetType(GemType.BLOCKER);
+	}
+
+	public void MoveBlockerDown()
+	{
+		if(prev != null)
+		{
+			prev.MoveBlockerDown();
+
+			if(type.Equals(GemType.BLOCKER))
+			{
+				SetType(GemType.GEM);
+				prev.MakeBlocker();
+			}
+		}
+		else
+		{
+			if(type.Equals(GemType.BLOCKER))
+			{
+				Debug.Log("BLOCKER REACHED BOTTOM");
+			}
+		}
+	}
+
+	public GemProxy GetCanonBlocker()
+	{
+		if(next != null)
+		{
+			if(next.type.Equals(GemType.BLOCKER))
+			{
+				return next;
+			}
+			else
+			{
+				return next.GetCanonBlocker();
+			}
+		}
+		return null;
 	}
 
 	public GemProxy GetTopGem()
@@ -120,7 +205,7 @@ public class GemProxy : MonoBehaviour
 
 	private Vector3 GetTweenToPosition()
 	{
-		Vector3 position = new Vector3(transform.position.x, 0, 0);
+		Vector3 position = new Vector3(transform.position.x, transform.parent.position.y, 0);
 
 		if(prev != null)
 		{
@@ -129,5 +214,4 @@ public class GemProxy : MonoBehaviour
 
 		return position;
 	}
-
 }

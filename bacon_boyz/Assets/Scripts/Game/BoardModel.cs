@@ -48,6 +48,12 @@ public class BoardModel
 		return null;
 	}	
 
+	public GemProxy GetRandomTopGem()
+	{
+		List<GemProxy> topGems = GetTopGems();
+		return topGems[Random.Range(0, topGems.Count-1)];
+	}
+
 	public List<GemProxy> GetBottomGems()
 	{
 		List<GemProxy> bottomGems = new List<GemProxy>();
@@ -59,6 +65,18 @@ public class BoardModel
 		}
 
 		return bottomGems;
+	}
+
+	public List<GemProxy> GetTopGems()
+	{
+		List<GemProxy> topGems = new List<GemProxy>();
+		
+		foreach(List<GemProxy> column in gemProxys)
+		{
+			topGems.Add(column[0].GetTopGem());			
+		}
+		
+		return topGems;
 	}
 
 	public List<GemProxy> GetRandomCanons()
