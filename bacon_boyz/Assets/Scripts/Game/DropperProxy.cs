@@ -2,12 +2,12 @@
 using System.Collections;
 using Holoville.HOTween;
 
-public class InvaderProxy : MonoBehaviour 
+public class DropperProxy : MonoBehaviour 
 {
 	public int GridX = Constants.GEM_AMOUNT_WIDTH;
 	public int GridY = Constants.GEM_AMOUNT_HEIGHT;
 
-	public float delayBetweenMoves = 3f;
+	public float delayBetweenMoves = 10f;
 
 	void Start () 
 	{
@@ -16,21 +16,9 @@ public class InvaderProxy : MonoBehaviour
 
 	IEnumerator Move()
 	{
-		int direction = -1;
-
 		while(true)
 		{
-			GridX += direction;
-			if(GridX < 1)
-			{
-				GridX = 1;
-				direction = 1;
-				GridY --;
-			} else if (GridX > Constants.GEM_AMOUNT_WIDTH) {
-				GridX = Constants.GEM_AMOUNT_WIDTH;
-				direction = -1;
-				GridY --;
-			}
+			GridY --;
 
 			TweenToNewPosition();
 
