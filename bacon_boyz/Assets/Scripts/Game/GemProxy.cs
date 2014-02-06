@@ -107,7 +107,7 @@ public class GemProxy : MonoBehaviour
 
 			if(type.Equals(GemType.BLOCKER))
 			{
-				SetType(GemType.GEM);
+				SetType(prev.type);
 				prev.MakeBlocker();
 
 				GemColor tmpColor = prev.color;

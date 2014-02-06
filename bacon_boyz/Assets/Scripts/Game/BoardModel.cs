@@ -82,10 +82,16 @@ public class BoardModel
 	public List<GemProxy> GetRandomCanons(int amount)
 	{
 		List<GemProxy> canons = new List<GemProxy>();
-		for(var i = 0; i< amount; i++)
+
+		while(canons.Count < amount)
 		{
-			canons.Add(GetRandomCanonGem());
+			GemProxy canon = GetRandomCanonGem();
+			if(canons.Contains(canon) == false)
+			{
+				canons.Add(canon);
+			}
 		}
+
 		return canons;
 	}
 
