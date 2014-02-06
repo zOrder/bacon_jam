@@ -8,14 +8,21 @@ public class InvaderProxy : MonoBehaviour
 	public int GridY = Constants.GEM_AMOUNT_HEIGHT;
 
 	public float delayBetweenMoves = 2f;
-
-	void Start () 
+	
+	public void StartMoving()
 	{
-		StartCoroutine(Move());
+		StartCoroutine("Move");
+	}
+
+	void OnDisable()
+	{
+		StopCoroutine("Move");
 	}
 
 	IEnumerator Move()
 	{
+		yield return new WaitForSeconds(delayBetweenMoves);
+
 		int direction = -1;
 
 		while(true)
@@ -40,7 +47,8 @@ public class InvaderProxy : MonoBehaviour
 
 	public void DieDieDie()
 	{
-
+		StopCoroutine("Move");
+		SetNewGridPosition(Constants.GEM_AMOUNT_WIDTH, Constants.GEM_AMOUNT_HEIGHT);
 	}
 
 	public void SetNewGridPosition(int x, int y)

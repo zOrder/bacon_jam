@@ -53,6 +53,7 @@ public class BoardController : MonoBehaviour
 		InvaderProxy invader = GetInvader();
 		int randomGridX = UnityEngine.Random.Range(1, Constants.GEM_AMOUNT_WIDTH);
 		invader.SetNewGridPosition(randomGridX, Constants.GEM_AMOUNT_HEIGHT);
+		invader.StartMoving();
 
 		invaders.Add(invader);
 	}
@@ -88,7 +89,7 @@ public class BoardController : MonoBehaviour
 	{
 		foreach(InvaderProxy invader in invaders)
 		{
-			if(invader.GridX == x)
+			if(invader.GridX == x+1)
 			{
 				invader.DieDieDie();
 				invader.gameObject.SetActive(false);
