@@ -36,7 +36,7 @@ public class BoardController : MonoBehaviour
 
 		if(matches.Count >= Constants.MIN_MATCH_SIZE)
 		{
-			EvaluateCanons(matches);
+			int canonsFired = EvaluateCanons(matches);
 			MoveMatchesOffscreen(matches);
 			boardModel.SortModel();
 			
@@ -47,6 +47,7 @@ public class BoardController : MonoBehaviour
 			UpdateHealth();
 			MoveBlocker();
 			SpawnBlocker();
+			SpawnNewCanons(canonsFired);
 		}
 	}
 
@@ -68,7 +69,7 @@ public class BoardController : MonoBehaviour
 		}
 	}
 
-	private void EvaluateCanons(List<GemProxy> matches)
+	private int EvaluateCanons(List<GemProxy> matches)
 	{
 		List<GemProxy> canons = new List<GemProxy>();
 		foreach(GemProxy found in matches)
@@ -94,6 +95,8 @@ public class BoardController : MonoBehaviour
 		}
 
 		remainingHealth -= shots * matches.Count;
+
+		return canons.Count;
 	}
 
 	private void MoveMatchesOffscreen(List<GemProxy> matches)
@@ -221,7 +224,12 @@ public class BoardController : MonoBehaviour
 
 	private void InitCanons()
 	{
-		List<GemProxy> canons = boardModel.GetRandomCanons();
+		SpawnNewCanons(Constants.NUMBER_OF_CANONS);
+	}
+
+	private void SpawnNewCanons(int amount)
+	{
+		List<GemProxy> canons = boardModel.GetRandomCanons(amount);
 		foreach(GemProxy canon in canons)
 		{
 			canon.MakeCanon();

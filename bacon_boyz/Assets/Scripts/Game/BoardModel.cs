@@ -79,20 +79,28 @@ public class BoardModel
 		return topGems;
 	}
 
-	public List<GemProxy> GetRandomCanons()
+	public List<GemProxy> GetRandomCanons(int amount)
 	{
 		List<GemProxy> canons = new List<GemProxy>();
-		for(var i = 0; i< Constants.NUMBER_OF_CANONS; i++)
+		for(var i = 0; i< amount; i++)
 		{
-			canons.Add(GetRandomGem());
+			canons.Add(GetRandomCanonGem());
 		}
 		return canons;
 	}
 
-	private GemProxy GetRandomGem()
+	private GemProxy GetRandomCanonGem()
 	{
 		int colum = Random.Range(0, Constants.GEM_AMOUNT_WIDTH);
-		int row = Random.Range(0, Constants.GEM_AMOUNT_HEIGHT);
-		return gemProxys[colum][row];
+		int row = Random.Range(0, Constants.GEM_AMOUNT_HEIGHT /2);
+
+		GemProxy canon = gemProxys[colum][row];
+
+		if(canon.type.Equals(GemType.CANON))
+		{
+			canon = GetRandomCanonGem();
+		}
+
+		return canon ;
 	}
 }
