@@ -13,6 +13,7 @@ public class BoardController : MonoBehaviour
 
 	private int remainingTurns = Constants.TURNS_PER_GAME;
 	private int remainingHealth = Constants.TURNS_PER_GAME;
+	private GameObject root;
 
 	void Start()
 	{
@@ -28,8 +29,11 @@ public class BoardController : MonoBehaviour
 	public void OnTap( TapGesture gesture)
 	{
 		Vector3 worldPoint = Camera.main.ScreenToWorldPoint (new Vector3 (gesture.Position.x, gesture.Position.y, 0f));
-		int x = (int)(worldPoint.x / Constants.GEM_UNIT_DIMENSION);
-		int y = (int)(worldPoint.y / Constants.GEM_UNIT_DIMENSION);
+		worldPoint.x -= root.transform.position.x;
+		worldPoint.y -= root.transform.position.y;
+
+		int x = (int)(worldPoint.x / Constants.GEM_UNIT_DIMENSION );
+		int y = (int)(worldPoint.y / Constants.GEM_UNIT_DIMENSION );
 
 		Debug.Log("tap "+gesture.Position +" "+gesture.Selection+" "+worldPoint + " -> "+x +" "+ y );
 
@@ -191,7 +195,7 @@ public class BoardController : MonoBehaviour
 	{
 		GameObject resource = Resources.Load("Gem") as GameObject;
 
-		GameObject root = new GameObject();
+		root = new GameObject();
 		root.transform.parent = this.transform;
 
 		for(int i = 0; i < Constants.GEM_AMOUNT_WIDTH; i++ )
@@ -222,7 +226,7 @@ public class BoardController : MonoBehaviour
 			boardModel.gemProxys.Add(column);
 		}
 
-		//root.transform.position = new Vector3(Constants.GEM_UNIT_DIMENSION / 2, Constants.GEM_UNIT_DIMENSION, 10);
+		root.transform.position = new Vector3(Constants.GEM_UNIT_DIMENSION / 2, Constants.GEM_UNIT_DIMENSION, 10);
 	}
 
 	private void InitCanons()
