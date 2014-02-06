@@ -2,20 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using Holoville.HOTween;
+using Holoville.HOTween.Plugins;
 
 public class Canon : MonoBehaviour 
 {
 	List<GameObject>pool = new List<GameObject>();
 		
-	public void ShootFromTo(Vector3 start, Vector3 destination)
+	public void ShootFromTo(Vector2 start, float destination)
 	{
 		Debug.Log("SHOOT FORM "+start +"  TO  "+destination);
 
 		GameObject bullet = GetBullet();
 		bullet.SetActive(true);
-		bullet.transform.position = start;
+		bullet.transform.position = new Vector3(start.x, start.y, bullet.transform.position.z);
 
-		TweenParms parms = new TweenParms().Prop("position", destination).Ease(EaseType.Linear).OnComplete(ReturnToPool, bullet);
+		TweenParms parms = new TweenParms().Prop("position", new PlugVector3Y(destination)).Ease(EaseType.Linear).OnComplete(ReturnToPool, bullet);
 		HOTween.To(bullet.transform, Constants.SHOOT_CANON_DURATION, parms);
 	}
 
@@ -39,7 +40,7 @@ public class Canon : MonoBehaviour
 		{
 			GameObject resource = Resources.Load("Gem") as GameObject;
 			bullet = Instantiate(resource) as GameObject;
-			bullet.transform.localScale =new Vector3(0.25f, 0.25f, 1);
+			//bullet.transform.localScale =new Vector3(0.25f, 0.25f, 1);
 			bullet.transform.parent = transform;
 		}
 

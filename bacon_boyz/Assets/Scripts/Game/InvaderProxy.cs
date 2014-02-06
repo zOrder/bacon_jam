@@ -7,7 +7,7 @@ public class InvaderProxy : MonoBehaviour
 	public int GridX = Constants.GEM_AMOUNT_WIDTH;
 	public int GridY = Constants.GEM_AMOUNT_HEIGHT;
 
-	public float delayBetweenMoves = 0.5f;
+	public float delayBetweenMoves = 2f;
 
 	void Start () 
 	{

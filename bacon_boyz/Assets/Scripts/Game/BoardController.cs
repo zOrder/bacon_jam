@@ -18,7 +18,7 @@ public class BoardController : MonoBehaviour
 	private List<InvaderProxy> invaders = new List<InvaderProxy>();
 	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
 
-	private float spawnDelay = 2f;
+	private float spawnDelay = 5f;
 
 	void Start()
 	{
@@ -30,7 +30,6 @@ public class BoardController : MonoBehaviour
 		UpdateHealth();
 
 		StartCoroutine(SpawnInvader());
-
 	}
 
 	IEnumerator SpawnInvader()
@@ -89,23 +88,27 @@ public class BoardController : MonoBehaviour
 	{
 		foreach(InvaderProxy invader in invaders)
 		{
-			if(invader.GridX == x)
+			if(invader.GridX == x+1)
 			{
 				invader.DieDieDie();
 				invader.gameObject.SetActive(false);
 
 				invaders.Remove(invader);
 				invaderPool.Add(invader);
-
-				canonBehaviour.ShootFromTo(new Vector3(x * Constants.GEM_UNIT_DIMENSION,y * Constants.GEM_UNIT_DIMENSION,0), new Vector3(invader.GridX * Constants.GEM_UNIT_DIMENSION, invader.GridY * Constants.GEM_UNIT_DIMENSION, 0));
+				canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), invader.GridY * Constants.GEM_UNIT_DIMENSION + root.transform.position.y );
 
 				return; 
 			}
 		}
 
-		canonBehaviour.ShootFromTo(new Vector3(x,y,0), new Vector3(x, 10, 0));
+		canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), 10f);
 
 		remainingHealth -= matches.Count;
+	}
+
+	private Vector2 ConvertGridToBoard(Vector2 gridPos)
+	{
+		return new Vector2(gridPos.x * Constants.GEM_UNIT_DIMENSION + root.transform.position.x, gridPos.y * Constants.GEM_UNIT_DIMENSION + root.transform.position.y);
 	}
 
 	private void MoveMatchesOffscreen(List<GemProxy> matches)
