@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class BoardModel 
 {
 	public List<List<GemProxy>> gemProxys;
+	public List<List<InvaderProxy>> inVaderProxys;
 
 	public BoardModel()
 	{

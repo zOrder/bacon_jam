@@ -26,118 +26,17 @@ public class GemProxy : MonoBehaviour
 	public GemProxy prev;
 	public GemProxy next;
 
-	private GameObject canon;
-	private GameObject blocker;
 
 	void Awake()
 	{
 		SetNewColor();
-		CreateCanonAndBlocker();
 	}
 
-	private void CreateCanonAndBlocker()
-	{
-		GameObject resource = Resources.Load("Gem") as GameObject;
-		canon = Instantiate(resource) as GameObject;
-		
-		canon.transform.localScale =new Vector3(0.5f, 0.5f, 1);
-		SpriteRenderer renderer = canon.GetComponent<SpriteRenderer>();
-		renderer.color = Color.cyan;
-		canon.transform.parent = transform;
-		canon.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
-		canon.SetActive(false);
-
-		blocker = Instantiate(resource) as GameObject;
-		
-		blocker.transform.localScale =new Vector3(0.5f, 0.5f, 1);
-		renderer = blocker.GetComponent<SpriteRenderer>();
-		renderer.color = Color.black;
-		blocker.transform.parent = transform;
-		blocker.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
-		blocker.SetActive(false);
-	}
-
-	public void MakeCanon()
-	{
-		SetType(GemType.CANON);
-	}
-
-	private void SetType(GemType type)
-	{
-		this.type = type;
-
-		switch(type)
-		{
-		case GemType.BLOCKER:
-			blocker.SetActive(true);
-			canon.SetActive(false);
-			break;
-		case GemType.CANON:
-			blocker.SetActive(false);
-			canon.SetActive(true);
-			break;
-		case GemType.GEM:
-			blocker.SetActive(false);
-			canon.SetActive(false);
-			break;
-		}
-	}
-
-	public void ResetType()
-	{
-		SetType(GemType.GEM);
-	}
-
-	public void MakeBlocker()
-	{
-		SetType(GemType.BLOCKER);
-	}
 
 	public void UpdateColorTo(GemColor color)
 	{
 		this.color = color;
 		UpdateColor();
-	}
-
-	public void MoveBlockerDown()
-	{
-		if(prev != null)
-		{
-			prev.MoveBlockerDown();
-
-			if(type.Equals(GemType.BLOCKER))
-			{
-				SetType(prev.type);
-				prev.MakeBlocker();
-
-				GemColor tmpColor = prev.color;
-				prev.UpdateColorTo(color);
-				UpdateColorTo(tmpColor);
-			}
-		}
-		else
-		{
-			if(type.Equals(GemType.BLOCKER))
-			{
-				Debug.Log("BLOCKER REACHED BOTTOM");
-			}
-		}
-	}
-
-	public GemProxy GetCanonBlocker()
-	{
-		if(next != null)
-		{
-			if(next.type.Equals(GemType.BLOCKER))
-			{
-				return next;
-			}
-			else
-			{
-				return next.GetCanonBlocker();
-			}
-		}
-		return null;
 	}
 
 	public GemProxy GetTopGem()

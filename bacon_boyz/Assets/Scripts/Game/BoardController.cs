@@ -19,11 +19,25 @@ public class BoardController : MonoBehaviour
 	{
 		SetupModel();
 		InitBoard();
-		InitCanons();
 		DropGems();
 		UpdateTurns();
 		UpdateHealth();
-		SpawnBlocker();
+
+		SetInvader();
+	}
+
+	private void SetInvader()
+	{
+		GameObject resource = Resources.Load("Gem") as GameObject;
+		GameObject invader = Instantiate(resource) as GameObject;
+		
+		invader.transform.localScale =new Vector3(0.5f, 0.5f, 1);
+		SpriteRenderer renderer = invader.GetComponent<SpriteRenderer>();
+		renderer.color = Color.grey;
+		invader.transform.parent = root.transform;
+		invader.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+		invader.AddComponent<InvaderProxy>();
+
 	}
 		
 	public void OnTap( TapGesture gesture)
@@ -41,7 +55,7 @@ public class BoardController : MonoBehaviour
 
 		if(matches.Count >= Constants.MIN_MATCH_SIZE)
 		{
-			int canonsFired = EvaluateCanons(matches);
+			EvaluateCanons(matches);
 			MoveMatchesOffscreen(matches);
 			boardModel.SortModel();
 			
@@ -50,60 +64,12 @@ public class BoardController : MonoBehaviour
 			remainingTurns --;
 			UpdateTurns();
 			UpdateHealth();
-			MoveBlocker();
-			SpawnBlocker();
-			SpawnNewCanons(canonsFired);
 		}
 	}
 
-	private void SpawnBlocker()
+	private void EvaluateCanons(List<GemProxy> matches)
 	{
-		if(remainingTurns % 2 == 0 )
-		{
-			GemProxy blocker = boardModel.GetRandomTopGem();
-			blocker.MakeBlocker();
-		}
-	}
-
-	private void MoveBlocker()
-	{
-		List<GemProxy> topGems = boardModel.GetTopGems();
-		foreach(GemProxy gem in topGems)
-		{
-			gem.MoveBlockerDown();
-		}
-	}
-
-	private int EvaluateCanons(List<GemProxy> matches)
-	{
-		List<GemProxy> canons = new List<GemProxy>();
-		foreach(GemProxy found in matches)
-		{
-			if(found.type.Equals(GemType.CANON))
-			{
-				canons.Add(found);
-			}
-		}
-
-		int shots = 0;
-		foreach(GemProxy canon in canons)
-		{
-			GemProxy blocker = canon.GetCanonBlocker();
-			if(blocker != null)
-			{
-				blocker.ResetType();
-				canonBehaviour.ShootFromTo(canon.transform.position, blocker.transform.position);
-			}
-			else
-			{
-				canonBehaviour.ShootFromTo(canon.transform.position, new Vector3(canon.transform.position.x, 10f, canon.transform.position.z));
-				shots ++;
-			}
-		}
-
-		remainingHealth -= shots * matches.Count;
-
-		return canons.Count;
+		remainingHealth -= matches.Count;
 	}
 
 	private void MoveMatchesOffscreen(List<GemProxy> matches)
@@ -127,7 +93,6 @@ public class BoardController : MonoBehaviour
 			found.next = null;
 			
 			found.SetOffscreen();
-			found.ResetType();
 		}
 	}
 
@@ -226,21 +191,7 @@ public class BoardController : MonoBehaviour
 			boardModel.gemProxys.Add(column);
 		}
 
-		root.transform.position = new Vector3(Constants.GEM_UNIT_DIMENSION / 2, Constants.GEM_UNIT_DIMENSION, 10);
-	}
-
-	private void InitCanons()
-	{
-		SpawnNewCanons(Constants.NUMBER_OF_CANONS);
-	}
-
-	private void SpawnNewCanons(int amount)
-	{
-		List<GemProxy> canons = boardModel.GetRandomCanons(amount);
-		foreach(GemProxy canon in canons)
-		{
-			canon.MakeCanon();
-		}
+		root.transform.position = new Vector3(Constants.GEM_UNIT_DIMENSION / 2, Constants.GEM_UNIT_DIMENSION, 0);
 	}
 
 	private void DropGems()
