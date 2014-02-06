@@ -26,6 +26,11 @@ public class GemProxy : MonoBehaviour
 	public GemProxy prev;
 	public GemProxy next;
 
+	public Sprite blueSprite;
+	public Sprite greenSprite;
+	public Sprite orangeSprite;
+	public Sprite purpleSprite;
+	public Sprite redSprite;
 
 	void Awake()
 	{
@@ -90,9 +95,35 @@ public class GemProxy : MonoBehaviour
 	private void UpdateColor()
 	{
 		SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
-		renderer.color = Helper.GetColorForGem(color);
+		renderer.sprite = GetSpriteForGem(color);
 	}
 
+	private Sprite GetSpriteForGem(GemColor gem)
+	{
+		Sprite sprite = redSprite;
+		
+		switch(gem)
+		{
+		case GemColor.RED:
+			sprite = redSprite;
+			break;
+		case GemColor.GREEN:
+			sprite = greenSprite;
+			break;
+		case GemColor.BLUE:
+			sprite = blueSprite;
+			break;
+		case GemColor.PURPLE:
+			sprite = purpleSprite;
+			break;
+		case GemColor.YELLOW:
+			sprite = orangeSprite;
+			break;
+		}
+		
+		return sprite;
+	}
+	
 	private void StartMove()
 	{
 		Vector3 position = GetTweenToPosition();

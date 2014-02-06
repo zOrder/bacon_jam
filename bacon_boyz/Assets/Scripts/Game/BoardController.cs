@@ -88,7 +88,7 @@ public class BoardController : MonoBehaviour
 	{
 		foreach(InvaderProxy invader in invaders)
 		{
-			if(invader.GridX == x+1)
+			if(invader.GridX == x)
 			{
 				invader.DieDieDie();
 				invader.gameObject.SetActive(false);
@@ -217,7 +217,7 @@ public class BoardController : MonoBehaviour
 			{
 				GameObject gem = Instantiate(resource) as GameObject;
 
-				GemProxy gemProxy = gem.AddComponent<GemProxy>();
+				GemProxy gemProxy = gem.GetComponent<GemProxy>();
 
 				if(prevGem != null)
 				{
