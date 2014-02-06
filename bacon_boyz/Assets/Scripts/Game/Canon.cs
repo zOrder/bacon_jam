@@ -9,13 +9,14 @@ public class Canon : MonoBehaviour
 		
 	public void ShootFromTo(Vector3 start, Vector3 destination)
 	{
+		Debug.Log("SHOOT FORM "+start +"  TO  "+destination);
+
 		GameObject bullet = GetBullet();
 		bullet.SetActive(true);
 		bullet.transform.position = start;
 
 		TweenParms parms = new TweenParms().Prop("position", destination).Ease(EaseType.Linear).OnComplete(ReturnToPool, bullet);
 		HOTween.To(bullet.transform, Constants.SHOOT_CANON_DURATION, parms);
-
 	}
 
 	private void ReturnToPool( TweenEvent data)

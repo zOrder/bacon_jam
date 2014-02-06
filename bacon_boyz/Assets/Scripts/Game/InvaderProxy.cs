@@ -7,7 +7,7 @@ public class InvaderProxy : MonoBehaviour
 	public int GridX = Constants.GEM_AMOUNT_WIDTH;
 	public int GridY = Constants.GEM_AMOUNT_HEIGHT;
 
-	public float delayBetweenMoves = 3f;
+	public float delayBetweenMoves = 0.5f;
 
 	void Start () 
 	{
@@ -38,11 +38,17 @@ public class InvaderProxy : MonoBehaviour
 		}
 	}
 
+	public void DieDieDie()
+	{
+
+	}
+
 	public void SetNewGridPosition(int x, int y)
 	{
 		GridX = x;
 		GridY = y;
-		TweenToNewPosition();
+
+		transform.position = GetTweenToPosition();
 	}
 
 	private void TweenToNewPosition()

@@ -5,39 +5,57 @@ using System;
 
 public class BoardController : MonoBehaviour 
 {
+	private GameObject root;
 	private BoardModel boardModel;
 
 	public string turns = "20";
 	public string health = "50";
-	public Canon canonBehaviour;
+	private Canon canonBehaviour;
 
 	private int remainingTurns = Constants.TURNS_PER_GAME;
 	private int remainingHealth = Constants.TURNS_PER_GAME;
-	private GameObject root;
+
+	private List<InvaderProxy> invaders = new List<InvaderProxy>();
+	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
+
+	private float spawnDelay = 2f;
 
 	void Start()
 	{
 		SetupModel();
 		InitBoard();
+		SetupCanon();
 		DropGems();
 		UpdateTurns();
 		UpdateHealth();
 
-		SetInvader();
+		StartCoroutine(SpawnInvader());
+
+	}
+
+	IEnumerator SpawnInvader()
+	{
+		while(true)
+		{
+			UpdateSpawnDelay();
+			SetInvader();
+
+			yield return new WaitForSeconds(spawnDelay);
+		}
+	}
+
+	private void UpdateSpawnDelay()
+	{
+		spawnDelay = Math.Max(1, spawnDelay - 0.1f);
 	}
 
 	private void SetInvader()
 	{
-		GameObject resource = Resources.Load("Gem") as GameObject;
-		GameObject invader = Instantiate(resource) as GameObject;
-		
-		invader.transform.localScale =new Vector3(0.5f, 0.5f, 1);
-		SpriteRenderer renderer = invader.GetComponent<SpriteRenderer>();
-		renderer.color = Color.grey;
-		invader.transform.parent = root.transform;
-		invader.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
-		invader.AddComponent<InvaderProxy>();
+		InvaderProxy invader = GetInvader();
+		int randomGridX = UnityEngine.Random.Range(1, Constants.GEM_AMOUNT_WIDTH);
+		invader.SetNewGridPosition(randomGridX, Constants.GEM_AMOUNT_HEIGHT);
 
+		invaders.Add(invader);
 	}
 		
 	public void OnTap( TapGesture gesture)
@@ -55,7 +73,7 @@ public class BoardController : MonoBehaviour
 
 		if(matches.Count >= Constants.MIN_MATCH_SIZE)
 		{
-			EvaluateCanons(matches);
+			EvaluateShot(matches, x , y);
 			MoveMatchesOffscreen(matches);
 			boardModel.SortModel();
 			
@@ -65,10 +83,28 @@ public class BoardController : MonoBehaviour
 			UpdateTurns();
 			UpdateHealth();
 		}
-	}
+	}	
 
-	private void EvaluateCanons(List<GemProxy> matches)
+	private void EvaluateShot(List<GemProxy> matches, int x, int y)
 	{
+		foreach(InvaderProxy invader in invaders)
+		{
+			if(invader.GridX == x)
+			{
+				invader.DieDieDie();
+				invader.gameObject.SetActive(false);
+
+				invaders.Remove(invader);
+				invaderPool.Add(invader);
+
+				canonBehaviour.ShootFromTo(new Vector3(x * Constants.GEM_UNIT_DIMENSION,y * Constants.GEM_UNIT_DIMENSION,0), new Vector3(invader.GridX * Constants.GEM_UNIT_DIMENSION, invader.GridY * Constants.GEM_UNIT_DIMENSION, 0));
+
+				return; 
+			}
+		}
+
+		canonBehaviour.ShootFromTo(new Vector3(x,y,0), new Vector3(x, 10, 0));
+
 		remainingHealth -= matches.Count;
 	}
 
@@ -151,6 +187,11 @@ public class BoardController : MonoBehaviour
 		return matches;
 	}
 
+	private void SetupCanon()
+	{
+		canonBehaviour = root.AddComponent<Canon>();
+	}
+
 	private void SetupModel()
 	{
 		boardModel = new BoardModel();
@@ -183,7 +224,7 @@ public class BoardController : MonoBehaviour
 				prevGem = gemProxy;
 
 				gem.transform.parent = root.transform;
-				gem.transform.position = new Vector3(i * Constants.GEM_UNIT_DIMENSION, Constants.OFFSCREEN_POSITION_Y , 0 );
+				gem.transform.position = new Vector3(i * Constants.GEM_UNIT_DIMENSION, Constants.OFFSCREEN_POSITION_Y , 1 );
 
 				column.Add(gemProxy);
 			}
@@ -201,5 +242,32 @@ public class BoardController : MonoBehaviour
 		{
 			p.MoveDown();
 		}
+	}
+
+	private InvaderProxy GetInvader()
+	{
+		InvaderProxy invader = null;
+		
+		if(invaderPool.Count > 0)
+		{
+			invader = invaderPool[0];
+			invaderPool.RemoveAt(0);
+		}
+		else
+		{
+			GameObject resource = Resources.Load("Gem") as GameObject;
+			GameObject invaderGO = Instantiate(resource) as GameObject;
+			
+			invaderGO.transform.localScale =new Vector3(0.5f, 0.5f, 1);
+			SpriteRenderer renderer = invaderGO.GetComponent<SpriteRenderer>();
+			renderer.color = Color.grey;
+			invaderGO.transform.parent = root.transform;
+			invaderGO.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+			invader = invaderGO.AddComponent<InvaderProxy>();
+		}
+
+		invader.gameObject.SetActive(true);
+
+		return invader;
 	}
 }
