@@ -9,6 +9,7 @@ public class Constants
 	public const int PIXEL_PER_UNIT = 100;
 	public const float GEM_UNIT_DIMENSION = (float)GEM_DIMENSION / (float)PIXEL_PER_UNIT;
 	public const float DROP_GEMS_DURATION = 0.1f;
+	public const float SHOOT_CANON_DURATION = 0.5f;
 	public const float OFFSCREEN_POSITION_Y = 10f;
 	public const int NUMBER_OF_CANONS = 4;
 	public const int MIN_MATCH_SIZE = 2;

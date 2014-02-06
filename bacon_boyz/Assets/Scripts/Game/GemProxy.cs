@@ -2,7 +2,6 @@
 using System.Collections;
 using Holoville.HOTween;
 
-
 public enum GemColor
 {
 	RED,

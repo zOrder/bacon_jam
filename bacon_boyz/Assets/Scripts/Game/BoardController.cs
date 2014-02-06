@@ -9,6 +9,7 @@ public class BoardController : MonoBehaviour
 
 	public string turns = "20";
 	public string health = "50";
+	public Canon canonBehaviour;
 
 	private int remainingTurns = Constants.TURNS_PER_GAME;
 	private int remainingHealth = Constants.TURNS_PER_GAME;
@@ -87,9 +88,11 @@ public class BoardController : MonoBehaviour
 			if(blocker != null)
 			{
 				blocker.ResetType();
+				canonBehaviour.ShootFromTo(canon.transform.position, blocker.transform.position);
 			}
 			else
 			{
+				canonBehaviour.ShootFromTo(canon.transform.position, new Vector3(canon.transform.position.x, 10f, canon.transform.position.z));
 				shots ++;
 			}
 		}
