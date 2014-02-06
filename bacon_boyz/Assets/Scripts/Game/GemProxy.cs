@@ -31,7 +31,7 @@ public class GemProxy : MonoBehaviour
 
 	void Awake()
 	{
-		UpdateColor();
+		SetNewColor();
 		CreateCanonAndBlocker();
 	}
 
@@ -93,6 +93,12 @@ public class GemProxy : MonoBehaviour
 		SetType(GemType.BLOCKER);
 	}
 
+	public void UpdateColorTo(GemColor color)
+	{
+		this.color = color;
+		UpdateColor();
+	}
+
 	public void MoveBlockerDown()
 	{
 		if(prev != null)
@@ -103,6 +109,10 @@ public class GemProxy : MonoBehaviour
 			{
 				SetType(GemType.GEM);
 				prev.MakeBlocker();
+
+				GemColor tmpColor = prev.color;
+				prev.UpdateColorTo(color);
+				UpdateColorTo(tmpColor);
 			}
 		}
 		else
@@ -169,12 +179,17 @@ public class GemProxy : MonoBehaviour
 	public void SetOffscreen()
 	{
 		transform.position = new Vector3(transform.position.x, Constants.OFFSCREEN_POSITION_Y, transform.position.z);
+		SetNewColor();
+	}
+
+	private void SetNewColor()
+	{
+		color = Helper.RandomColor();
 		UpdateColor();
 	}
 
 	private void UpdateColor()
 	{
-		color = Helper.RandomColor();
 		SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
 		renderer.color = Helper.GetColorForGem(color);
 	}
