@@ -33,34 +33,37 @@ public class BoardController : MonoBehaviour
 
 		List<GemProxy> matches = FindMatchingGemsForPosition(x,y);
 
-		foreach(GemProxy found in matches)
+		if(matches.Count >= Constants.MIN_MATCH_SIZE)
 		{
-			GemProxy top = found.GetTopGem();
-
-			if(found.prev != null)
+			foreach(GemProxy found in matches)
 			{
-				found.prev.next = found.next;
-				top  = found.prev.GetTopGem();
+				GemProxy top = found.GetTopGem();
+				
+				if(found.prev != null)
+				{
+					found.prev.next = found.next;
+					top  = found.prev.GetTopGem();
+				}
+				if(found.next != null)
+				{
+					found.next.prev = found.prev;
+				}
+				
+				top.next = found;
+				found.prev = top;
+				found.next = null;
+				
+				found.SetOffscreen();
 			}
-			if(found.next != null)
-			{
-				found.next.prev = found.prev;
-			}
-
-			top.next = found;
-			found.prev = top;
-			found.next = null;
-
-			found.SetOffscreen();
+			
+			boardModel.SortModel();
+			
+			DropGems();
+			
+			remainingTurns --;
+			UpdateTurns();
+			UpdateHealth();
 		}
-
-		boardModel.SortModel();
-
-		DropGems();
-
-		remainingTurns --;
-		UpdateTurns();
-		UpdateHealth();
 	}
 
 	private void UpdateTurns()
