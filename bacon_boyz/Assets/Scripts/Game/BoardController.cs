@@ -20,6 +20,8 @@ public class BoardController : MonoBehaviour
 	private float minSpawnDelay = 1f;
 	private float invadeSpeed = 2f;
 
+	private float lastTap;
+
 	private GemMatcher matcher;
 
 	private bool gameIsRunning = false;
@@ -143,8 +145,14 @@ public class BoardController : MonoBehaviour
 		invaders.Add(invader);
 	}
 		
-	public void OnTap( TapGesture gesture)
+	public void OnTap (TapGesture gesture)
 	{
+		if (Time.time - lastTap < 0.25f) {
+			return;
+		}
+
+		lastTap = Time.time;
+
 		if(gameIsRunning == false)
 		{
 			return;
@@ -182,13 +190,8 @@ public class BoardController : MonoBehaviour
 				FindOrphanedGems();
 			}
 
-			/*
-			if (matches.Count > 6) {
-				AudioController.Play ("bigcannon");
-			} else {
-				AudioController.Play ("cannonfire");
-			}
-			*/
+
+			AudioController.Play ("time");
 		}
 	}
 
@@ -333,6 +336,8 @@ public class BoardController : MonoBehaviour
 
 	private void FindOrphanedGems()
 	{
+		int numberToFlip = 3;
+
 		for(int i = 0; i< Constants.GEM_AMOUNT_WIDTH; i++)
 		{
 			for(int j = 0; j< Constants.GEM_AMOUNT_HEIGHT / 2; j++)
@@ -344,7 +349,11 @@ public class BoardController : MonoBehaviour
 
 					origin.UpdateColorTo(neighbour.color);
 
-					return;
+					numberToFlip--;
+
+					if (numberToFlip > 0) {
+						return;
+					}
 				}
 			}
 		}
