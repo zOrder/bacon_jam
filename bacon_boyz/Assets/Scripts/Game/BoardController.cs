@@ -18,7 +18,10 @@ public class BoardController : MonoBehaviour
 	private List<InvaderProxy> invaders = new List<InvaderProxy>();
 	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
 
-	private float spawnDelay = 15f;
+	private float spawnDelay = 10f;
+	private float minSpawnDelay = 5f;
+	private float invadeSpeed = 3f;
+
 	private GemMatcher matcher;
 
 	void Start()
@@ -52,7 +55,7 @@ public class BoardController : MonoBehaviour
 
 	private void UpdateSpawnDelay()
 	{
-		spawnDelay = Math.Max(7.5f, spawnDelay - 0.05f);
+		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.05f);
 	}
 
 	private void SetInvader()
@@ -60,7 +63,7 @@ public class BoardController : MonoBehaviour
 		InvaderProxy invader = GetInvader();
 		int randomGridX = UnityEngine.Random.Range(1, Constants.GEM_AMOUNT_WIDTH);
 		invader.SetNewGridPosition(randomGridX, Constants.GEM_AMOUNT_HEIGHT);
-		invader.delayBetweenMoves = 4f;
+		invader.delayBetweenMoves = invadeSpeed;
 		invader.movementType = InvaderProxy.MovementType.DROP;
 		invader.StartMoving();
 

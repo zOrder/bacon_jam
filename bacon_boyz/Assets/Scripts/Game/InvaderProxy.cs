@@ -5,6 +5,8 @@ using Holoville.HOTween;
 public class InvaderProxy : MonoBehaviour 
 {
 
+	static float INVADER_SCALE = 0.85f;
+
 	public enum MovementType
 	{
 		INVADE,
@@ -20,6 +22,7 @@ public class InvaderProxy : MonoBehaviour
 	public void StartMoving()
 	{
 		healthPoints = Constants.INVADER_HEALTH;
+		TweenToHealthScale();
 		StartCoroutine("Move");
 	}
 
@@ -60,9 +63,17 @@ public class InvaderProxy : MonoBehaviour
 				}
 	}
 
+	public void TweenToHealthScale ()
+	{
+		float scale = (0.6f + 0.2f * healthPoints) * INVADER_SCALE;
+		TweenParms parms = new TweenParms().Prop("localScale", new Vector3(scale,scale,scale)).Ease(EaseType.EaseInOutElastic);
+		HOTween.To (transform,0.4f, parms);
+	}
+
 	public void OnHit()
 	{
 		healthPoints --;
+		TweenToHealthScale();
 	}
 
 	public void DieDieDie()
@@ -87,6 +98,6 @@ public class InvaderProxy : MonoBehaviour
 
 	private Vector3 GetTweenToPosition()
 	{
-		return new Vector3(GridX * Constants.GEM_UNIT_DIMENSION, GridY * Constants.GEM_UNIT_DIMENSION, -1);
+		return new Vector3(GridX * Constants.GEM_UNIT_DIMENSION - Constants.GEM_UNIT_DIMENSION*0.5f, GridY * Constants.GEM_UNIT_DIMENSION, -1);
 	}
 }
