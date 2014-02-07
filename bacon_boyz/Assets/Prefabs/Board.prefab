@@ -41,6 +41,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turns: 20
   health: 50
+  startButton: {fileID: 0}
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
