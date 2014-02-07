@@ -169,7 +169,7 @@ public class BoardController : MonoBehaviour
 		if(matches.Count >= Constants.MIN_MATCH_SIZE)
 		{
 			EvaluateShot(matches, x , y);
-
+			UpdatePoints();
 			
 			if(invaders.Count == 0)
 			{
@@ -219,7 +219,6 @@ public class BoardController : MonoBehaviour
 		canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), x+6f);
 
 		points += matches.Count;
-		UpdatePoints();
 	}
 
 	private void KillInvader(InvaderProxy invader)
