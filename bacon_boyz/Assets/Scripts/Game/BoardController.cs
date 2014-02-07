@@ -166,10 +166,11 @@ public class BoardController : MonoBehaviour
 			boardModel.SortModel();
 			
 			DropGems();
-		}
-		if(ShouldFindOrphans())
-		{
-			FindOrphanedGems();
+
+			if(ShouldFindOrphans())
+			{
+				FindOrphanedGems();
+			}
 		}
 	}
 
