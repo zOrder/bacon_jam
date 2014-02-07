@@ -5,7 +5,7 @@ using System;
 
 public class BoardController : MonoBehaviour 
 {
-	public string pointsString = "score: 0";
+	public string pointsString = "";
 	public int points = 0;
 
 	public dfButton startButton;
@@ -115,7 +115,7 @@ public class BoardController : MonoBehaviour
 	{
 		StopCoroutine("SpawnInvader");
 
-		pointsString = "END SCORE: "+points;
+		pointsString = ""+points;
 
 		for(int i= invaders.Count-1; i>=0 ; i--)
 		{
@@ -264,7 +264,7 @@ public class BoardController : MonoBehaviour
 
 	private void UpdatePoints()
 	{
-		pointsString = "score: " + points;
+		pointsString = "" + points;
 	}
 
 	private void SetupCanon()
