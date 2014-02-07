@@ -16,7 +16,7 @@ public class BoardController : MonoBehaviour
 	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
 
 	private int wave = 0;
-	private float spawnDelay = 3f;
+	private float spawnDelay = 7.5f;
 	private float minSpawnDelay = 1f;
 	private float invadeSpeed = 2f;
 
@@ -45,7 +45,6 @@ public class BoardController : MonoBehaviour
 	private void StartGame()
 	{
 		gameIsRunning = true;
-		spawnDelay = Constants.INITIAL_SPAWN_DEALY;
 	
 		SetupModel();
 		InitBoard();
@@ -76,7 +75,7 @@ public class BoardController : MonoBehaviour
 			int columnB = (columnA + UnityEngine.Random.Range(1, 3)) % Constants.GEM_AMOUNT_WIDTH;
 			int columnC = (columnB + UnityEngine.Random.Range(1, 4)) % Constants.GEM_AMOUNT_WIDTH;
 
-			float speed = Mathf.Max (invadeSpeed*0.5f,invadeSpeed - wave*0.1f);
+			float speed = Mathf.Max (invadeSpeed*0.5f,invadeSpeed - wave*0.05f);
 
 			InvaderProxy.MovementType movement = InvaderProxy.MovementType.DROP;
 			int h = 3;

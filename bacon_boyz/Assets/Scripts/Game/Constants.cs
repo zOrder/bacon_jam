@@ -17,5 +17,4 @@ public class Constants
 	public const int DEFAULT_HEALTH = 50;
 
 	public const int INVADER_HEALTH = 3;
-	public const float INITIAL_SPAWN_DEALY = 10;
 }
