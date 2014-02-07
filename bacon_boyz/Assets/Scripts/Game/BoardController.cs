@@ -219,7 +219,7 @@ public class BoardController : MonoBehaviour
 			}
 		}
 
-		canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), 10f);
+		canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), x+6f);
 
 		points += matches.Count;
 		UpdatePoints();
