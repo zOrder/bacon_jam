@@ -12,14 +12,13 @@ public class BoardController : MonoBehaviour
 	private GameObject root;
 	private BoardModel boardModel;
 	private Canon canonBehaviour;
-	private int remainingHealth = Constants.TURNS_PER_GAME;
 	private List<InvaderProxy> invaders = new List<InvaderProxy>();
 	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
 
 	private int wave = 0;
-	private float spawnDelay = 8f;
-	private float minSpawnDelay = 4f;
-	private float invadeSpeed = 3f;
+	private float spawnDelay = 4f;
+	private float minSpawnDelay = 1f;
+	private float invadeSpeed = 2f;
 
 	private GemMatcher matcher;
 
@@ -45,7 +44,6 @@ public class BoardController : MonoBehaviour
 	private void StartGame()
 	{
 		gameIsRunning = true;
-		remainingHealth = Constants.TURNS_PER_GAME;
 		spawnDelay = Constants.INITIAL_SPAWN_DEALY;
 	
 		SetupModel();
@@ -77,7 +75,7 @@ public class BoardController : MonoBehaviour
 			int columnB = (columnA + UnityEngine.Random.Range(1, 3)) % Constants.GEM_AMOUNT_WIDTH;
 			int columnC = (columnB + UnityEngine.Random.Range(1, 4)) % Constants.GEM_AMOUNT_WIDTH;
 
-			float speed = Mathf.Max (invadeSpeed*0.5f,invadeSpeed - wave*0.05f);
+			float speed = Mathf.Max (invadeSpeed*0.5f,invadeSpeed - wave*0.1f);
 
 			InvaderProxy.MovementType movement = InvaderProxy.MovementType.DROP;
 			int h = 3;
@@ -90,14 +88,12 @@ public class BoardController : MonoBehaviour
 			}
 			else if (wave > 5 && UnityEngine.Random.Range(0,100) < 50) { // new movement
 				movement = InvaderProxy.MovementType.INVADE;
-				speed *= 0.5f;
+				speed *= 0.4f;
 			}
 
 			SetInvader(columnA+1, speed, movement, h);
+			SetInvader(columnB+1, speed, movement, h);
 			if (wave > 1) {
-				SetInvader(columnB+1, speed, movement, h);
-			}
-			if (wave > 2) {
 				SetInvader(columnC+1, speed, movement, h);
 			}
 			if (wave > 15) {
@@ -113,7 +109,7 @@ public class BoardController : MonoBehaviour
 
 	private void UpdateSpawnDelay()
 	{
-		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.15f);
+		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.3f);
 	}
 
 	private void EndGame()
@@ -170,8 +166,6 @@ public class BoardController : MonoBehaviour
 			boardModel.SortModel();
 			
 			DropGems();
-
-			//UpdateHealth();
 		}
 		if(ShouldFindOrphans())
 		{
