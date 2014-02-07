@@ -300,7 +300,7 @@ public class BoardController : MonoBehaviour
 
 		float borderWidth  = (Screen.width - (Constants.GEM_AMOUNT_WIDTH * Constants.GEM_DIMENSION)) / 2;
 
-		root.transform.position = new Vector3(borderWidth / Constants.PIXEL_PER_UNIT , 1.1f, 0);
+		root.transform.position = new Vector3(borderWidth / Constants.PIXEL_PER_UNIT , 0.6f, 0);
 	}
 
 	private void DropGems()
