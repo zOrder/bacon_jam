@@ -199,6 +199,8 @@ public class BoardController : MonoBehaviour
 
 	private void EvaluateShot(List<GemProxy> matches, int x, int y)
 	{
+		points += matches.Count;
+
 		foreach(InvaderProxy invader in invaders)
 		{
 			if(invader.GridX == x+1 && invader.GridY > y)
@@ -217,8 +219,6 @@ public class BoardController : MonoBehaviour
 		}
 
 		canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), x+6f);
-
-		points += matches.Count;
 	}
 
 	private void KillInvader(InvaderProxy invader)
