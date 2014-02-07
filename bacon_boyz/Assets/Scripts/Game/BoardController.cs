@@ -5,54 +5,87 @@ using System;
 
 public class BoardController : MonoBehaviour 
 {
+	public string health = "50";
+	public dfButton startButton;
 	private GameObject root;
 	private BoardModel boardModel;
-
-	public string turns = "20";
-	public string health = "50";
 	private Canon canonBehaviour;
-
-	private int remainingTurns = Constants.TURNS_PER_GAME;
 	private int remainingHealth = Constants.TURNS_PER_GAME;
-
 	private List<InvaderProxy> invaders = new List<InvaderProxy>();
 	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
-
-	private float spawnDelay = 15f;
+	private float spawnDelay = Constants.INITIAL_SPAWN_DEALY;
 	private GemMatcher matcher;
+
+	private bool gameIsRunning = false;
 
 	void Start()
 	{
+		startButton.Click += OnClick;
+		NotificationManager.Instance.AddObserver(OnInvaderReachedBottom, NotificationConstants.INVADER_REACHED_BOTTOM);
+	}
+
+	public void OnInvaderReachedBottom( Notification notification)
+	{
+		EndGame();
+	}
+
+	public void OnClick( dfControl control, dfMouseEventArgs mouseEvent )
+	{
+		StartGame();
+		startButton.gameObject.SetActive(false);
+	}
+
+	private void StartGame()
+	{
+		gameIsRunning = true;
+		remainingHealth = Constants.TURNS_PER_GAME;
+		spawnDelay = Constants.INITIAL_SPAWN_DEALY;
+	
 		SetupModel();
 		InitBoard();
 		SetupCanon();
 		DropGems();
-		UpdateTurns();
 		UpdateHealth();
-
+		
 		matcher = new GemMatcher(boardModel);
-
+		
 		StartCoroutine(SpawnInvader());
 	}
-
+	
 	IEnumerator SpawnInvader()
 	{
-		while(true)
-		{
-			yield return new WaitForSeconds(spawnDelay);
+		yield return new WaitForSeconds(spawnDelay);
 
-			UpdateSpawnDelay();
+		while(gameIsRunning)
+		{
+			SetInvader();
+			SetInvader();
 			SetInvader();
 			UpdateSpawnDelay();
-			SetInvader();
-			UpdateSpawnDelay();
-			SetInvader();
+
+			yield return new WaitForSeconds(spawnDelay);
 		}
 	}
 
 	private void UpdateSpawnDelay()
 	{
 		spawnDelay = Math.Max(7.5f, spawnDelay - 0.05f);
+	}
+
+	private void EndGame()
+	{
+		health = "DEAD";
+
+		for(int i= invaders.Count-1; i>=0 ; i--)
+		{
+			InvaderProxy invader = invaders[i];
+			KillInvader(invader);
+		}
+
+		invaderPool.Clear();
+
+		gameIsRunning = false;
+		startButton.gameObject.SetActive(true);
 	}
 
 	private void SetInvader()
@@ -69,6 +102,11 @@ public class BoardController : MonoBehaviour
 		
 	public void OnTap( TapGesture gesture)
 	{
+		if(gameIsRunning == false)
+		{
+			return;
+		}
+
 		Vector3 worldPoint = Camera.main.ScreenToWorldPoint (new Vector3 (gesture.Position.x, gesture.Position.y, 0f));
 		worldPoint.x -= root.transform.position.x;
 		worldPoint.y -= root.transform.position.y;
@@ -87,10 +125,8 @@ public class BoardController : MonoBehaviour
 			boardModel.SortModel();
 			
 			DropGems();
-			
-			remainingTurns --;
-			UpdateTurns();
-			UpdateHealth();
+
+			//UpdateHealth();
 		}
 		if(ShouldFindOrphans())
 		{
@@ -114,11 +150,7 @@ public class BoardController : MonoBehaviour
 
 				if(invader.healthPoints <= 0)
 				{
-					invader.DieDieDie();
-					invader.gameObject.SetActive(false);
-					
-					invaders.Remove(invader);
-					invaderPool.Add(invader);
+					KillInvader(invader);
 				}
 
 				return; 
@@ -128,6 +160,17 @@ public class BoardController : MonoBehaviour
 		canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), 10f);
 
 		remainingHealth -= matches.Count;
+	}
+
+	private void KillInvader(InvaderProxy invader)
+	{
+		invader.DieDieDie();
+		invader.gameObject.SetActive(false);
+		if(invaders.Contains(invader))
+		{
+			invaders.Remove(invader);
+		}
+		invaderPool.Add(invader);
 	}
 
 	private Vector2 ConvertGridToBoard(Vector2 gridPos)
@@ -159,14 +202,14 @@ public class BoardController : MonoBehaviour
 		}
 	}
 
-	private void UpdateTurns()
-	{
-		turns = "Turns left " + remainingTurns;
-	}
-
 	private void UpdateHealth()
 	{
 		health = "health " + remainingHealth;
+
+		if(remainingHealth <= 0)
+		{
+			EndGame();
+		}
 	}
 
 	private void SetupCanon()
@@ -182,6 +225,11 @@ public class BoardController : MonoBehaviour
 	private void InitBoard()
 	{
 		GameObject resource = Resources.Load("Gem") as GameObject;
+
+		if(root != null)
+		{
+			Destroy(root);
+		}
 
 		root = new GameObject();
 		root.transform.parent = this.transform;
