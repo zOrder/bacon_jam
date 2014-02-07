@@ -16,7 +16,7 @@ public class BoardController : MonoBehaviour
 	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
 
 	private int wave = 0;
-	private float spawnDelay = 4f;
+	private float spawnDelay = 3f;
 	private float minSpawnDelay = 1f;
 	private float invadeSpeed = 2f;
 
@@ -63,7 +63,7 @@ public class BoardController : MonoBehaviour
 	
 	IEnumerator SpawnInvader()
 	{
-		yield return new WaitForSeconds(1f);
+		yield return new WaitForSeconds(0.1f);
 
 		while(gameIsRunning)
 		{
@@ -110,7 +110,7 @@ public class BoardController : MonoBehaviour
 
 	private void UpdateSpawnDelay()
 	{
-		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.3f);
+		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.15f);
 	}
 
 	private void EndGame()
@@ -172,6 +172,14 @@ public class BoardController : MonoBehaviour
 			{
 				FindOrphanedGems();
 			}
+
+			/*
+			if (matches.Count > 6) {
+				AudioController.Play ("bigcannon");
+			} else {
+				AudioController.Play ("cannonfire");
+			}
+			*/
 		}
 	}
 

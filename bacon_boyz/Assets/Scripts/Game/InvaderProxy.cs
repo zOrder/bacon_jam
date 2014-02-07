@@ -83,6 +83,8 @@ public class InvaderProxy : MonoBehaviour
 		healthPoints -= damage;
 		TweenToHealthScale();
 
+		AudioController.Play("strongpunch");
+
 		return damage;
 	}
 
@@ -90,6 +92,8 @@ public class InvaderProxy : MonoBehaviour
 	{
 		StopCoroutine("Move");
 		SetNewGridPosition(Constants.GEM_AMOUNT_WIDTH, Constants.GEM_AMOUNT_HEIGHT);
+
+		AudioController.Play("kick");
 	}
 
 	public void SetNewGridPosition(int x, int y)

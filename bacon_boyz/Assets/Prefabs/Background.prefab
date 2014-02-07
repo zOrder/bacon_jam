@@ -107,6 +107,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 400012}
   - 212: {fileID: 21200010}
+  - 114: {fileID: 11400006}
   m_Layer: 0
   m_Name: ship
   m_TagString: Untagged
@@ -208,8 +209,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c04460839fd43c19719249ec4ac146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
-  distance: .200000003
+  speed: 20
+  distance: .100000001
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,8 +222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c04460839fd43c19719249ec4ac146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
-  distance: .5
+  speed: 20
+  distance: .349999994
 --- !u!114 &11400004
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -234,8 +235,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c04460839fd43c19719249ec4ac146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  distance: .25
+  speed: 10
+  distance: .150000006
+--- !u!114 &11400006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 100012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a463e90a4fb7d41a1a607f5cd8809d02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 8
+  distance: 1
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1
