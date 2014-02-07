@@ -52,37 +52,6 @@ MonoBehaviour:
     _parentCategoryName: 
     AudioObjectPrefab: {fileID: 0}
     AudioItems:
-    - Name: Silly Fun
-      Loop: 0
-      loopSequenceCount: 0
-      loopSequenceOverlap: 0
-      loopSequenceRandomDelay: 0
-      DestroyOnLoad: 1
-      Volume: 1
-      SubItemPickMode: 2
-      MinTimeBetweenPlayCalls: .100000001
-      MaxInstanceCount: 0
-      Delay: 0
-      overrideAudioSourceSettings: 0
-      audioSource_MinDistance: 1
-      audioSource_MaxDistance: 500
-      subItems:
-      - SubItemType: 0
-        Probability: 1
-        ItemModeAudioID: 
-        Clip: {fileID: 8300000, guid: 9e6099ec49de34c58a3badb61b8fd818, type: 3}
-        Volume: 1
-        PitchShift: 0
-        Pan2D: 0
-        Delay: 0
-        RandomPitch: 0
-        RandomVolume: 0
-        RandomDelay: 0
-        ClipStopTime: 0
-        ClipStartTime: 0
-        FadeIn: 0
-        FadeOut: 0
-        RandomStartPosition: 0
     - Name: One-eyed Maestro
       Loop: 0
       loopSequenceCount: 0
@@ -114,40 +83,9 @@ MonoBehaviour:
         FadeIn: 0
         FadeOut: 0
         RandomStartPosition: 0
-    - Name: Bushwick Tarantella Loop
-      Loop: 0
-      loopSequenceCount: 0
-      loopSequenceOverlap: 0
-      loopSequenceRandomDelay: 0
-      DestroyOnLoad: 1
-      Volume: 1
-      SubItemPickMode: 2
-      MinTimeBetweenPlayCalls: .100000001
-      MaxInstanceCount: 0
-      Delay: 0
-      overrideAudioSourceSettings: 0
-      audioSource_MinDistance: 1
-      audioSource_MaxDistance: 500
-      subItems:
-      - SubItemType: 0
-        Probability: 1
-        ItemModeAudioID: 
-        Clip: {fileID: 8300000, guid: 55f603b671b2e4729963ca02f86001c9, type: 3}
-        Volume: 1
-        PitchShift: 0
-        Pan2D: 0
-        Delay: 0
-        RandomPitch: 0
-        RandomVolume: 0
-        RandomDelay: 0
-        ClipStopTime: 0
-        ClipStartTime: 0
-        FadeIn: 0
-        FadeOut: 0
-        RandomStartPosition: 0
     _volume: 1
   musicPlaylist:
-  - Bushwick Tarantella Loop
+  - One-eyed Maestro
   loopPlaylist: 1
   shufflePlaylist: 0
   crossfadePlaylist: 0
@@ -157,7 +95,7 @@ MonoBehaviour:
   _volume: 1
   _currentInspectorSelection:
     currentCategoryIndex: 0
-    currentItemIndex: 2
+    currentItemIndex: 0
     currentSubitemIndex: 0
     currentPlaylistIndex: 0
 --- !u!1001 &100100000
