@@ -16,7 +16,7 @@ public class BoardController : MonoBehaviour
 	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
 
 	private int wave = 0;
-	private float spawnDelay = 7.5f;
+	private float spawnDelay = 8f;
 	private float minSpawnDelay = 1f;
 	private float invadeSpeed = 2.5f;
 
@@ -108,7 +108,7 @@ public class BoardController : MonoBehaviour
 
 	private void UpdateSpawnDelay()
 	{
-		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.075f);
+		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.09f);
 	}
 
 	private void EndGame()
