@@ -16,8 +16,10 @@ public class Canon : MonoBehaviour
 		bullet.SetActive(true);
 		bullet.transform.position = new Vector3(start.x, start.y, bullet.transform.position.z);
 
+		float distance = destination - start .y;
+
 		TweenParms parms = new TweenParms().Prop("position", new PlugVector3Y(destination)).Ease(EaseType.Linear).OnComplete(ReturnToPool, bullet);
-		HOTween.To(bullet.transform, Constants.SHOOT_CANON_DURATION, parms);
+		HOTween.To(bullet.transform, distance * Constants.SHOOT_CANON_DURATION, parms);
 	}
 
 	private void ReturnToPool( TweenEvent data)
