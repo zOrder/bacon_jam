@@ -38,9 +38,8 @@ public class Canon : MonoBehaviour
 		}
 		else
 		{
-			GameObject resource = Resources.Load("Gem") as GameObject;
+			GameObject resource = Resources.Load("cannonBall") as GameObject;
 			bullet = Instantiate(resource) as GameObject;
-			//bullet.transform.localScale =new Vector3(0.25f, 0.25f, 1);
 			bullet.transform.parent = transform;
 		}
 
