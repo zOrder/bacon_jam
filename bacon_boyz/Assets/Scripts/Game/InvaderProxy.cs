@@ -97,17 +97,19 @@ public class InvaderProxy : MonoBehaviour
 		GridX = x;
 		GridY = y;
 
-		transform.position = GetTweenToPosition();
+		gameObject.transform.localPosition = GetTweenToPosition();
+		Debug.Log("SET X "+x +" : "+y+" "+ transform.position);
 	}
 
 	private void TweenToNewPosition()
 	{		
-		TweenParms parms = new TweenParms().Prop("position", GetTweenToPosition()).Ease(EaseType.Linear);
+		TweenParms parms = new TweenParms().Prop("localPosition", GetTweenToPosition()).Ease(EaseType.Linear);
 		HOTween.To(transform, 0.4f, parms);
 	}
 
 	private Vector3 GetTweenToPosition()
 	{
-		return new Vector3(GridX * Constants.GEM_UNIT_DIMENSION - Constants.GEM_UNIT_DIMENSION*0.5f, GridY * Constants.GEM_UNIT_DIMENSION, -1);
+		float halfGem = (Constants.GEM_UNIT_DIMENSION / 2f);
+		return new Vector3((GridX-1) * Constants.GEM_UNIT_DIMENSION + halfGem , GridY * Constants.GEM_UNIT_DIMENSION -halfGem, -1);
 	}
 }

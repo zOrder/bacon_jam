@@ -269,7 +269,7 @@ public class BoardController : MonoBehaviour
 
 		root = new GameObject();
 		root.transform.parent = this.transform;
-
+		
 		for(int i = 0; i < Constants.GEM_AMOUNT_WIDTH; i++ )
 		{
 			GemProxy prevGem = null;
@@ -298,7 +298,9 @@ public class BoardController : MonoBehaviour
 			boardModel.gemProxys.Add(column);
 		}
 
-		root.transform.position = new Vector3(Constants.GEM_UNIT_DIMENSION / 2, Constants.GEM_UNIT_DIMENSION, 0);
+		float borderWidth  = (Screen.width - (Constants.GEM_AMOUNT_WIDTH * Constants.GEM_DIMENSION)) / 2;
+
+		root.transform.position = new Vector3(borderWidth / Constants.PIXEL_PER_UNIT , 1.1f, 0);
 	}
 
 	private void DropGems()
@@ -340,14 +342,14 @@ public class BoardController : MonoBehaviour
 		}
 		else
 		{
-			GameObject resource = Resources.Load("Gem") as GameObject;
+			GameObject resource = Resources.Load("invader") as GameObject;
 			GameObject invaderGO = Instantiate(resource) as GameObject;
 			
-			invaderGO.transform.localScale =new Vector3(0.5f, 0.5f, 1);
+			//invaderGO.transform.localScale =new Vector3(0.5f, 0.5f, 1);
 			SpriteRenderer renderer = invaderGO.GetComponent<SpriteRenderer>();
 			renderer.color = Color.grey;
 			invaderGO.transform.parent = root.transform;
-			invaderGO.transform.position = new Vector3(transform.position.x, transform.position.y, -1);
+
 			invader = invaderGO.AddComponent<InvaderProxy>();
 		}
 
