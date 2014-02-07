@@ -39,23 +39,22 @@ public class InvaderProxy : MonoBehaviour
 	IEnumerator Move ()
 	{
 		yield return new WaitForSeconds (delayBetweenMoves);
-		int direction = -1;
+		int direction = 0;
 		while (true) {
 			if (this.movementType == MovementType.INVADE) {
-					GridX += direction;
-					if (GridX < 1) {
-							GridX = 1;
-							direction = 1;
-							GridY --;
-					} else if (GridX > Constants.GEM_AMOUNT_WIDTH) {
-							GridX = Constants.GEM_AMOUNT_WIDTH;
-							direction = -1;
-							GridY --;
-					}
-					
-			} else if (this.movementType == MovementType.DROP) {
+				if (direction % 2 == 0) {
 					GridY--;
-					
+				} else {
+					if (direction == 1) {
+						GridX--;
+					} else {
+						GridX++;
+					}
+					GridX = Mathf.Max( Mathf.Min (GridX,Constants.GEM_AMOUNT_WIDTH), 1);
+				}
+				direction = (direction + 1) % 4;
+			} else if (this.movementType == MovementType.DROP) {
+				GridY--;
 			}
 
 			if(GridY <= 0)
@@ -76,10 +75,15 @@ public class InvaderProxy : MonoBehaviour
 		HOTween.To (transform,0.4f, parms);
 	}
 
-	public void OnHit()
+	public int OnHit(int matchSize)
 	{
-		healthPoints --;
+		int damage = 1;
+		if (matchSize > 6) damage = 3;
+
+		healthPoints -= damage;
 		TweenToHealthScale();
+
+		return damage;
 	}
 
 	public void DieDieDie()

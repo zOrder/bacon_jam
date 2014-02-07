@@ -5,7 +5,9 @@ using System;
 
 public class BoardController : MonoBehaviour 
 {
-	public string health = "50";
+	public string pointsString = "score: 0";
+	public int points = 0;
+
 	public dfButton startButton;
 	private GameObject root;
 	private BoardModel boardModel;
@@ -14,8 +16,9 @@ public class BoardController : MonoBehaviour
 	private List<InvaderProxy> invaders = new List<InvaderProxy>();
 	private List<InvaderProxy> invaderPool = new List<InvaderProxy>();
 
-	private float spawnDelay = Constants.INITIAL_SPAWN_DEALY;
-	private float minSpawnDelay = 5f;
+	private int wave = 0;
+	private float spawnDelay = 8f;
+	private float minSpawnDelay = 4f;
 	private float invadeSpeed = 3f;
 
 	private GemMatcher matcher;
@@ -49,7 +52,10 @@ public class BoardController : MonoBehaviour
 		InitBoard();
 		SetupCanon();
 		DropGems();
-		UpdateHealth();
+
+		wave = 0;
+		points = 0;
+		UpdatePoints();
 		
 		matcher = new GemMatcher(boardModel);
 		
@@ -58,14 +64,48 @@ public class BoardController : MonoBehaviour
 	
 	IEnumerator SpawnInvader()
 	{
-		yield return new WaitForSeconds(spawnDelay);
+		yield return new WaitForSeconds(1f);
 
 		while(gameIsRunning)
 		{
-			SetInvader();
-			SetInvader();
-			SetInvader();
+
 			UpdateSpawnDelay();
+
+			wave++;
+
+			int columnA = UnityEngine.Random.Range(0, Constants.GEM_AMOUNT_WIDTH - 1);
+			int columnB = (columnA + UnityEngine.Random.Range(1, 3)) % Constants.GEM_AMOUNT_WIDTH;
+			int columnC = (columnB + UnityEngine.Random.Range(1, 4)) % Constants.GEM_AMOUNT_WIDTH;
+
+			float speed = Mathf.Max (invadeSpeed*0.5f,invadeSpeed - wave*0.05f);
+
+			InvaderProxy.MovementType movement = InvaderProxy.MovementType.DROP;
+			int h = 3;
+
+			if (wave > 15 && UnityEngine.Random.Range(0,100) < 50) { // speedy
+				speed *= 0.75f;
+			}
+			else if (wave > 10 && UnityEngine.Random.Range(0,100) < 50) { // big health
+				h = 4;
+			}
+			else if (wave > 5 && UnityEngine.Random.Range(0,100) < 50) { // new movement
+				movement = InvaderProxy.MovementType.INVADE;
+				speed *= 0.5f;
+			}
+
+			SetInvader(columnA+1, speed, movement, h);
+			if (wave > 1) {
+				SetInvader(columnB+1, speed, movement, h);
+			}
+			if (wave > 2) {
+				SetInvader(columnC+1, speed, movement, h);
+			}
+			if (wave > 15) {
+				SetInvader(columnC+1, speed, movement, h);
+			}
+			if (wave > 20) {
+				SetInvader(columnC+1, speed, movement, h);
+			}
 
 			yield return new WaitForSeconds(spawnDelay);
 		}
@@ -73,12 +113,12 @@ public class BoardController : MonoBehaviour
 
 	private void UpdateSpawnDelay()
 	{
-		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.05f);
+		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.15f);
 	}
 
 	private void EndGame()
 	{
-		health = "DEAD";
+		pointsString = "END SCORE: "+points;
 
 		for(int i= invaders.Count-1; i>=0 ; i--)
 		{
@@ -92,13 +132,14 @@ public class BoardController : MonoBehaviour
 		startButton.gameObject.SetActive(true);
 	}
 
-	private void SetInvader()
+	private void SetInvader(int column, float speed, InvaderProxy.MovementType movement, int h)
 	{
 		InvaderProxy invader = GetInvader();
-		int randomGridX = UnityEngine.Random.Range(1, Constants.GEM_AMOUNT_WIDTH);
+		int randomGridX = column;
 		invader.SetNewGridPosition(randomGridX, Constants.GEM_AMOUNT_HEIGHT);
 		invader.delayBetweenMoves = invadeSpeed;
-		invader.movementType = InvaderProxy.MovementType.DROP;
+		invader.movementType = movement;
+		invader.healthPoints = h;
 		invader.StartMoving();
 
 		invaders.Add(invader);
@@ -149,12 +190,13 @@ public class BoardController : MonoBehaviour
 		{
 			if(invader.GridX == x+1)
 			{
-				invader.OnHit();
+				invader.OnHit(matches.Count);
 				canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), invader.GridY * Constants.GEM_UNIT_DIMENSION + root.transform.position.y );
 
 				if(invader.healthPoints <= 0)
 				{
 					KillInvader(invader);
+					points += 30;
 				}
 
 				return; 
@@ -163,7 +205,8 @@ public class BoardController : MonoBehaviour
 
 		canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), 10f);
 
-		remainingHealth -= matches.Count;
+		points += matches.Count;
+		UpdatePoints();
 	}
 
 	private void KillInvader(InvaderProxy invader)
@@ -206,14 +249,9 @@ public class BoardController : MonoBehaviour
 		}
 	}
 
-	private void UpdateHealth()
+	private void UpdatePoints()
 	{
-		health = "health " + remainingHealth;
-
-		if(remainingHealth <= 0)
-		{
-			EndGame();
-		}
+		pointsString = "score: " + points;
 	}
 
 	private void SetupCanon()
