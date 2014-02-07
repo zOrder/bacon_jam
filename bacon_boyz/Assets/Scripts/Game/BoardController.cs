@@ -167,10 +167,11 @@ public class BoardController : MonoBehaviour
 			boardModel.SortModel();
 			
 			DropGems();
-		}
-		if(ShouldFindOrphans())
-		{
-			FindOrphanedGems();
+
+			if(ShouldFindOrphans())
+			{
+				FindOrphanedGems();
+			}
 		}
 	}
 
@@ -301,7 +302,7 @@ public class BoardController : MonoBehaviour
 
 		float borderWidth  = (Screen.width - (Constants.GEM_AMOUNT_WIDTH * Constants.GEM_DIMENSION)) / 2;
 
-		root.transform.position = new Vector3(borderWidth / Constants.PIXEL_PER_UNIT , 1.1f, 0);
+		root.transform.position = new Vector3(borderWidth / Constants.PIXEL_PER_UNIT , 0.6f, 0);
 	}
 
 	private void DropGems()
@@ -348,7 +349,6 @@ public class BoardController : MonoBehaviour
 			
 			//invaderGO.transform.localScale =new Vector3(0.5f, 0.5f, 1);
 			SpriteRenderer renderer = invaderGO.GetComponent<SpriteRenderer>();
-			renderer.color = Color.grey;
 			invaderGO.transform.parent = root.transform;
 
 			invader = invaderGO.AddComponent<InvaderProxy>();
