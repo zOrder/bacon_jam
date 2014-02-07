@@ -18,7 +18,7 @@ public class BoardController : MonoBehaviour
 	private int wave = 0;
 	private float spawnDelay = 7.5f;
 	private float minSpawnDelay = 1f;
-	private float invadeSpeed = 2f;
+	private float invadeSpeed = 2.5f;
 
 	private float lastTap;
 
@@ -77,20 +77,17 @@ public class BoardController : MonoBehaviour
 			int columnB = (columnA + UnityEngine.Random.Range(1, 3)) % Constants.GEM_AMOUNT_WIDTH;
 			int columnC = (columnB + UnityEngine.Random.Range(1, 4)) % Constants.GEM_AMOUNT_WIDTH;
 
-			float speed = Mathf.Max (invadeSpeed*0.5f,invadeSpeed - wave*0.05f);
+			float speed = Mathf.Max (invadeSpeed*0.5f,invadeSpeed - wave*0.01f);
 
 			InvaderProxy.MovementType movement = InvaderProxy.MovementType.DROP;
 			int h = 3;
 
-			if (wave > 15 && UnityEngine.Random.Range(0,100) < 50) { // speedy
-				speed *= 0.75f;
-			}
-			else if (wave > 10 && UnityEngine.Random.Range(0,100) < 50) { // big health
+			if (wave > 12 && UnityEngine.Random.Range(0,100) < 50) { // big health
 				h = 4;
 			}
-			else if (wave > 5 && UnityEngine.Random.Range(0,100) < 50) { // new movement
+			else if (wave > 8 && UnityEngine.Random.Range(0,100) < 50) { // new movement
 				movement = InvaderProxy.MovementType.INVADE;
-				speed *= 0.4f;
+				speed *= 0.45f;
 			}
 
 			SetInvader(columnA+1, speed, movement, h);
@@ -111,7 +108,7 @@ public class BoardController : MonoBehaviour
 
 	private void UpdateSpawnDelay()
 	{
-		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.15f);
+		spawnDelay = Math.Max(minSpawnDelay, spawnDelay - 0.075f);
 	}
 
 	private void EndGame()
@@ -336,7 +333,7 @@ public class BoardController : MonoBehaviour
 
 	private void FindOrphanedGems()
 	{
-		int numberToFlip = 3;
+		int numberToFlip = 5;
 
 		for(int i = 0; i< Constants.GEM_AMOUNT_WIDTH; i++)
 		{
@@ -350,7 +347,6 @@ public class BoardController : MonoBehaviour
 					origin.UpdateColorTo(neighbour.color);
 
 					numberToFlip--;
-
 					if (numberToFlip > 0) {
 						return;
 					}

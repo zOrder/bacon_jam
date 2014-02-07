@@ -5,7 +5,7 @@ using Holoville.HOTween;
 public class InvaderProxy : MonoBehaviour 
 {
 
-	static float INVADER_SCALE = 0.85f;
+	static float INVADER_SCALE = 1f;
 
 	public enum MovementType
 	{
