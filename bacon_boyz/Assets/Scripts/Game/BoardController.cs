@@ -201,7 +201,7 @@ public class BoardController : MonoBehaviour
 	{
 		foreach(InvaderProxy invader in invaders)
 		{
-			if(invader.GridX == x+1)
+			if(invader.GridX == x+1 && invader.GridY > y)
 			{
 				invader.OnHit(matches.Count);
 				canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), invader.GridY * Constants.GEM_UNIT_DIMENSION + root.transform.position.y );
