@@ -347,7 +347,6 @@ public class BoardController : MonoBehaviour
 			
 			//invaderGO.transform.localScale =new Vector3(0.5f, 0.5f, 1);
 			SpriteRenderer renderer = invaderGO.GetComponent<SpriteRenderer>();
-			renderer.color = Color.grey;
 			invaderGO.transform.parent = root.transform;
 
 			invader = invaderGO.AddComponent<InvaderProxy>();
