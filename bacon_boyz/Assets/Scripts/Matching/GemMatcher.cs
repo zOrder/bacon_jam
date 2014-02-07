@@ -11,6 +11,49 @@ public class GemMatcher
 		this.boardModel = boardModel;
 	}
 
+	public GemProxy GetRandomNeighbour(int x, int y)
+	{
+		List<GemProxy> neighbours = GetNeighbours(x, y);
+
+		return neighbours[Random.Range(0, neighbours.Count -1)];
+	}
+
+	public bool HasMatchingNeighbours(int x, int y)
+	{
+		GemProxy origin = boardModel.GetGemAtPosition(x, y);
+		
+		List<GemProxy> neighbours = GetNeighbours(x, y);
+
+		foreach(GemProxy n in neighbours)
+		{
+			if(n.color.Equals(origin.color))
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private List<GemProxy> GetNeighbours(int x, int y)
+	{
+		List<GemProxy> neighbours = new List<GemProxy>();
+		
+		GemProxy n = boardModel.GetGemAtPosition(x - 1, y);
+		if(n != null ) neighbours.Add(n);
+		
+		n = boardModel.GetGemAtPosition(x + 1, y);
+		if(n != null ) neighbours.Add(n);
+		
+		n = boardModel.GetGemAtPosition(x, y - 1);
+		if(n != null ) neighbours.Add(n);
+		
+		n = boardModel.GetGemAtPosition(x, y + 1);
+		if(n != null ) neighbours.Add(n);
+
+		return neighbours;
+	}
+	
 	public List<GemProxy> FindMatchingGemsForPosition(int x, int y)
 	{
 		Stack<Vector2> stack = new Stack<Vector2>();

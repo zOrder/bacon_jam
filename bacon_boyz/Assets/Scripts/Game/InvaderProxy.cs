@@ -14,11 +14,12 @@ public class InvaderProxy : MonoBehaviour
 
 	public int GridX = Constants.GEM_AMOUNT_WIDTH;
 	public int GridY = Constants.GEM_AMOUNT_HEIGHT;
-
 	public float delayBetweenMoves = 3f;
+	public int healthPoints;
 	
 	public void StartMoving()
 	{
+		healthPoints = Constants.INVADER_HEALTH;
 		StartCoroutine("Move");
 	}
 
@@ -57,6 +58,11 @@ public class InvaderProxy : MonoBehaviour
 						TweenToNewPosition ();
 						yield return new WaitForSeconds (delayBetweenMoves);
 				}
+	}
+
+	public void OnHit()
+	{
+		healthPoints --;
 	}
 
 	public void DieDieDie()

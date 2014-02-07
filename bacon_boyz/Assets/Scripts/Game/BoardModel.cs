@@ -96,6 +96,20 @@ public class BoardModel
 		return canons;
 	}
 
+	public List<GemProxy> GetLowerHalfGems()
+	{
+		List<GemProxy> gems = new List<GemProxy>();
+
+		foreach(List<GemProxy> column in gemProxys)
+		{
+			for(int i=0; i< Constants.GEM_AMOUNT_HEIGHT / 2; i ++ )
+			{
+				gems.Add(column[i]);
+			}
+		}
+		return gems;
+	}
+
 	private GemProxy GetRandomCanonGem()
 	{
 		int colum = Random.Range(0, Constants.GEM_AMOUNT_WIDTH);

@@ -92,7 +92,16 @@ public class BoardController : MonoBehaviour
 			UpdateTurns();
 			UpdateHealth();
 		}
-	}	
+		if(ShouldFindOrphans())
+		{
+			FindOrphanedGems();
+		}
+	}
+
+	private bool ShouldFindOrphans()
+	{
+		return UnityEngine.Random.Range(1, 3) % 2 == 0;
+	}
 
 	private void EvaluateShot(List<GemProxy> matches, int x, int y)
 	{
@@ -100,12 +109,17 @@ public class BoardController : MonoBehaviour
 		{
 			if(invader.GridX == x+1)
 			{
-				invader.DieDieDie();
-				invader.gameObject.SetActive(false);
-
-				invaders.Remove(invader);
-				invaderPool.Add(invader);
+				invader.OnHit();
 				canonBehaviour.ShootFromTo(ConvertGridToBoard(new Vector2(x, y)), invader.GridY * Constants.GEM_UNIT_DIMENSION + root.transform.position.y );
+
+				if(invader.healthPoints <= 0)
+				{
+					invader.DieDieDie();
+					invader.gameObject.SetActive(false);
+					
+					invaders.Remove(invader);
+					invaderPool.Add(invader);
+				}
 
 				return; 
 			}
@@ -209,6 +223,25 @@ public class BoardController : MonoBehaviour
 		foreach(GemProxy p in bottomGems)
 		{
 			p.MoveDown();
+		}
+	}
+
+	private void FindOrphanedGems()
+	{
+		for(int i = 0; i< Constants.GEM_AMOUNT_WIDTH; i++)
+		{
+			for(int j = 0; j< Constants.GEM_AMOUNT_HEIGHT / 2; j++)
+			{
+				if(matcher.HasMatchingNeighbours(i, j) == false)
+				{
+					GemProxy origin  = boardModel.GetGemAtPosition(i, j);
+					GemProxy neighbour = matcher.GetRandomNeighbour(i, j);
+
+					origin.UpdateColorTo(neighbour.color);
+
+					return;
+				}
+			}
 		}
 	}
 

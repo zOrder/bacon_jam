@@ -15,4 +15,6 @@ public class Constants
 	public const int MIN_MATCH_SIZE = 2;
 	public const int TURNS_PER_GAME = 20;
 	public const int DEFAULT_HEALTH = 50;
+
+	public const int INVADER_HEALTH = 3;
 }
