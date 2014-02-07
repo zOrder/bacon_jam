@@ -57,12 +57,12 @@ public class BoardController : MonoBehaviour
 		
 		matcher = new GemMatcher(boardModel);
 		
-		StartCoroutine(SpawnInvader());
+		StartCoroutine("SpawnInvader", 0.1f);
 	}
 	
-	IEnumerator SpawnInvader()
+	IEnumerator SpawnInvader(float initialDelay)
 	{
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForSeconds(initialDelay);
 
 		while(gameIsRunning)
 		{
@@ -114,6 +114,8 @@ public class BoardController : MonoBehaviour
 
 	private void EndGame()
 	{
+		StopCoroutine("SpawnInvader");
+
 		pointsString = "END SCORE: "+points;
 
 		for(int i= invaders.Count-1; i>=0 ; i--)
@@ -162,6 +164,14 @@ public class BoardController : MonoBehaviour
 		if(matches.Count >= Constants.MIN_MATCH_SIZE)
 		{
 			EvaluateShot(matches, x , y);
+
+			
+			if(invaders.Count == 0)
+			{
+				StopCoroutine("SpawnInvader");
+				StartCoroutine("SpawnInvader", 0.5f);
+			}
+
 			MoveMatchesOffscreen(matches);
 			boardModel.SortModel();
 			
