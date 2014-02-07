@@ -39,6 +39,7 @@ public class BoardController : MonoBehaviour
 	{
 		StartGame();
 		startButton.gameObject.SetActive(false);
+		AudioController.PlayMusicPlaylist();
 	}
 
 	private void StartGame()

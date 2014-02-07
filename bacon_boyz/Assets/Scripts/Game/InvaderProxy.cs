@@ -70,7 +70,7 @@ public class InvaderProxy : MonoBehaviour
 
 	public void TweenToHealthScale ()
 	{
-		float scale = (0.6f + 0.2f * healthPoints) * INVADER_SCALE;
+		float scale = (0.25f + 0.25f * healthPoints) * INVADER_SCALE;
 		TweenParms parms = new TweenParms().Prop("localScale", new Vector3(scale,scale,scale)).Ease(EaseType.EaseInOutElastic);
 		HOTween.To (transform,0.4f, parms);
 	}
@@ -103,8 +103,8 @@ public class InvaderProxy : MonoBehaviour
 
 	private void TweenToNewPosition()
 	{		
-		TweenParms parms = new TweenParms().Prop("localPosition", GetTweenToPosition()).Ease(EaseType.Linear);
-		HOTween.To(transform, 0.4f, parms);
+		TweenParms parms = new TweenParms().Prop("localPosition", GetTweenToPosition()).Ease(EaseType.EaseInOutElastic);
+		HOTween.To(transform, 0.6f, parms);
 	}
 
 	private Vector3 GetTweenToPosition()
