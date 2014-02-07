@@ -1,48 +1,62 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using Holoville.HOTween;
 
 public class InvaderProxy : MonoBehaviour 
 {
+
+	public enum MovementType
+	{
+		INVADE,
+		DROP
+	}
+
+
 	public int GridX = Constants.GEM_AMOUNT_WIDTH;
 	public int GridY = Constants.GEM_AMOUNT_HEIGHT;
 
-	public float delayBetweenMoves = 2f;
+	public float delayBetweenMoves = 3f;
 	
 	public void StartMoving()
 	{
 		StartCoroutine("Move");
 	}
 
-	void OnDisable()
+	private MovementType _movement = MovementType.INVADE;
+	public MovementType movementType {
+				get { return _movement; }
+				set { _movement = value; }
+	}
+
+	void OnDisable () 
 	{
 		StopCoroutine("Move");
 	}
 
-	IEnumerator Move()
+	IEnumerator Move ()
 	{
-		yield return new WaitForSeconds(delayBetweenMoves);
-
-		int direction = -1;
-
-		while(true)
-		{
-			GridX += direction;
-			if(GridX < 1)
-			{
-				GridX = 1;
-				direction = 1;
-				GridY --;
-			} else if (GridX > Constants.GEM_AMOUNT_WIDTH) {
-				GridX = Constants.GEM_AMOUNT_WIDTH;
-				direction = -1;
-				GridY --;
-			}
-
-			TweenToNewPosition();
-
-			yield return new WaitForSeconds(delayBetweenMoves);
-		}
+				yield return new WaitForSeconds (delayBetweenMoves);
+				int direction = -1;
+				while (true) {
+						if (this.movementType == MovementType.INVADE) {
+								GridX += direction;
+								if (GridX < 1) {
+										GridX = 1;
+										direction = 1;
+										GridY --;
+								} else if (GridX > Constants.GEM_AMOUNT_WIDTH) {
+										GridX = Constants.GEM_AMOUNT_WIDTH;
+										direction = -1;
+										GridY --;
+								}
+								
+						} else if (this.movementType == MovementType.DROP) {
+								GridY--;
+								
+						}
+						TweenToNewPosition ();
+						yield return new WaitForSeconds (delayBetweenMoves);
+				}
 	}
 
 	public void DieDieDie()
