@@ -130,7 +130,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .653625488, y: -1.53938293, z: 0}
+  m_LocalPosition: {x: .326814801, y: -.769689977, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -156,7 +156,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100004}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.47769928, y: .895423889, z: 0}
+  m_LocalPosition: {x: -.148963943, y: .0489654541, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -178,7 +178,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.668746948, y: 1.00416565, z: 0}
+  m_LocalPosition: {x: -.563545227, y: 1.00209045, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 400010}
@@ -191,7 +191,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100010}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: .03125, z: 0}
+  m_LocalPosition: {x: 0, y: .015625, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400008}
@@ -202,7 +202,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100012}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.658500671, y: .939987183, z: 0}
+  m_LocalPosition: {x: -.239585876, y: .0708389282, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 400002}
@@ -276,8 +276,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: .653997838, y: .239583343, z: .00100000005}
-  m_Center: {x: .326998919, y: -.119791672, z: 0}
+  m_Size: {x: .326998919, y: .119791672, z: .00100000005}
+  m_Center: {x: .16349946, y: -.0598958358, z: 0}
 --- !u!65 &6500002
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -288,7 +288,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.33333337, y: 2, z: 0}
+  m_Size: {x: 1.125, y: 2, z: 0}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6500004
 BoxCollider:
@@ -300,8 +300,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: .317187518, y: .0755208358, z: .00100000005}
-  m_Center: {x: .158593759, y: -.0377604179, z: 0}
+  m_Size: {x: .420052111, y: .0377604179, z: .00100000005}
+  m_Center: {x: .210026056, y: -.018880209, z: 0}
 --- !u!65 &6500006
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -312,8 +312,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.34375012, y: 2.00416684, z: .00100000005}
-  m_Center: {x: .67187506, y: -1.00208342, z: 0}
+  m_Size: {x: .67187506, y: 1.00208342, z: .00100000005}
+  m_Center: {x: .33593753, y: -.50104171, z: 0}
 --- !u!65 &6500008
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -324,8 +324,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.33333337, y: 2.36666679, z: .00100000005}
-  m_Center: {x: .666666687, y: -1.1833334, z: 0}
+  m_Size: {x: .666666687, y: 1.1833334, z: .00100000005}
+  m_Center: {x: .333333343, y: -.591666698, z: 0}
 --- !u!65 &6500010
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -336,8 +336,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: .650000036, y: .156250015, z: .00100000005}
-  m_Center: {x: .325000018, y: -.0781250075, z: 0}
+  m_Size: {x: .325000018, y: .0781250075, z: .00100000005}
+  m_Center: {x: .162500009, y: -.0390625037, z: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -464,8 +464,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiScale: 1
   inputManager: {fileID: 11400008}
-  fixedWidth: 640
-  fixedHeight: 960
+  fixedWidth: 1080
+  fixedHeight: 1920
   atlas: {fileID: 11400000, guid: 09c01bd20b52a49c9bf4759444f46bd9, type: 2}
   defaultFont: {fileID: 11400000, guid: a06f67fa7e1e94b319bc9d4074b7f5bf, type: 2}
   mergeMaterials: 0
@@ -520,7 +520,7 @@ MonoBehaviour:
   disabledColor:
     serializedVersion: 2
     rgba: 4294967295
-  size: {x: 152.25, y: 36.25}
+  size: {x: 403.25, y: 36.25}
   minSize: {x: 0, y: 0}
   maxSize: {x: 0, y: 0}
   clipChildren: 1
@@ -529,10 +529,10 @@ MonoBehaviour:
   layout:
     anchorStyle: 5
     margins:
-      left: 91
-      top: 50
-      right: 396.75
-      bottom: 873.75
+      left: 397
+      top: 913
+      right: 279.75
+      bottom: 970.75
     owner: {fileID: 11400010}
   renderOrder: 5
   isLocalized: 0
@@ -621,8 +621,8 @@ MonoBehaviour:
     margins:
       left: -1
       top: -2
-      right: -4
-      bottom: 0
+      right: 436
+      bottom: 960
     owner: {fileID: 11400014}
   renderOrder: 1
   isLocalized: 0
@@ -714,10 +714,10 @@ MonoBehaviour:
   layout:
     anchorStyle: 5
     margins:
-      left: 4
-      top: 29
-      right: 324
-      bottom: 856
+      left: 310
+      top: 892
+      right: 458
+      bottom: 953
     owner: {fileID: 11400016}
   renderOrder: 4
   isLocalized: 0
